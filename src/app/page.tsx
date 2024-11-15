@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { motion, useScroll } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Marquee from '@/components/Marquee';
+import AnimatedBackground from './components/AnimatedBackground';
 
 const CircleIndicator = () => (
   <div className='absolute flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 -translate-x-1/2 -translate-y-1/2 left-[calc(50%+11px)]'>
@@ -85,7 +86,10 @@ const TimelineItem = ({
 };
 
 const HeroSection = () => {
-  const frontEndSkills = ['Flutter', 'NextJS', 'React', 'Vue'];
+  const { scrollYProgress } = useScroll();
+  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+
+  const frontEndSkills = ['Flutter', 'NextJS', 'React', 'Gatsby', 'Vue'];
   const backEndSkills = [
     'Rust',
     'NodeJS',
@@ -99,108 +103,112 @@ const HeroSection = () => {
   ];
 
   return (
-    <div className='relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8'>
-      {/* Enhanced gradient with more depth */}
-      <div className='absolute inset-0 bg-gradient-to-b from-blue-500/20 via-blue-500/10 to-transparent' />
-
-      {/* Optional: Animated background dots/grid */}
-      <div className='absolute inset-0 opacity-20'>
-        <div className='absolute inset-0 bg-[radial-gradient(#4444dd_1px,transparent_1px)] [background-size:16px_16px]' />
-      </div>
+    <motion.div
+      style={{ opacity }}
+      className='relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8'
+    >
+      <AnimatedBackground />
 
       <div className='relative z-10 text-center max-w-7xl mx-auto'>
         <motion.h1
           className='text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-400'
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{
+            duration: 1.2,
+            delay: 0.3,
+            type: 'spring',
+            bounce: 0.4,
+          }}
         >
           JD Builds
         </motion.h1>
 
         <motion.p
           className='text-lg sm:text-xl text-gray-300 mb-12 max-w-2xl mx-auto'
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{
+            duration: 1.2,
+            delay: 0.6,
+            type: 'spring',
+            bounce: 0.3,
+          }}
         >
           Full Stack Developer & Entrepreneur
         </motion.p>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className='w-full sm:w-3/4 md:w-1/2 mx-auto relative'
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.9 }}
+          className='w-full sm:w-3/4 md:w-1/2 mx-auto relative mt-20'
         >
-          {/* Add gradient container */}
-          <div className='relative overflow-hidden rounded-full px-1'>
-            {/* Left gradient - adjusted to match dark background */}
-            <div className='absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-[#000913] to-transparent z-10' />
+          {/* First Marquee Container */}
+          <motion.div
+            className='relative overflow-hidden px-1 my-4'
+            initial={{ x: 100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 1.2, delay: 1.2 }}
+          >
+            {/* Left gradient */}
+            <div className='absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
 
-            <Marquee pauseOnHover speed={40} className='[--duration:15s]'>
-              {frontEndSkills.map((skill) => (
-                <div
-                  key={skill}
-                  className='px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-full backdrop-blur-sm mx-2 transition-colors duration-300'
-                >
-                  <span className='text-blue-300 hover:text-blue-200'>
-                    {skill}
-                  </span>
-                </div>
-              ))}
-            </Marquee>
+            <div className='relative'>
+              <Marquee pauseOnHover speed={40} className='[--duration:15s]'>
+                {frontEndSkills.map((skill) => (
+                  <div
+                    key={skill}
+                    className='px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-full backdrop-blur-sm mx-2 transition-colors duration-300'
+                  >
+                    <span className='text-blue-300 hover:text-blue-200 whitespace-nowrap'>
+                      {skill}
+                    </span>
+                  </div>
+                ))}
+              </Marquee>
+            </div>
 
-            {/* Right gradient - adjusted to match dark background */}
-            <div className='absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-[#000913] to-transparent z-10' />
-          </div>
+            {/* Right gradient */}
+            <div className='absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
+          </motion.div>
 
-          {/* Second marquee container */}
-          <div className='relative overflow-hidden rounded-full px-1'>
-            {/* Left gradient - adjusted to match dark background */}
-            <div className='absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-[#000913] to-transparent z-10' />
+          {/* Second Marquee Container */}
+          <motion.div
+            className='relative overflow-hidden px-1 my-4'
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 1.2, delay: 1.5 }}
+          >
+            {/* Left gradient */}
+            <div className='absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
 
-            <Marquee
-              reverse
-              pauseOnHover
-              speed={30}
-              className='[--duration:25s] mt-4'
-            >
-              {backEndSkills.map((skill) => (
-                <div
-                  key={skill}
-                  className='px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-full backdrop-blur-sm mx-2 transition-colors duration-300'
-                >
-                  <span className='text-blue-300 hover:text-blue-200'>
-                    {skill}
-                  </span>
-                </div>
-              ))}
-            </Marquee>
+            <div className='relative'>
+              <Marquee
+                reverse
+                pauseOnHover
+                speed={30}
+                className='[--duration:25s]'
+              >
+                {backEndSkills.map((skill) => (
+                  <div
+                    key={skill}
+                    className='px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-full backdrop-blur-sm mx-2 transition-colors duration-300'
+                  >
+                    <span className='text-blue-300 hover:text-blue-200 whitespace-nowrap'>
+                      {skill}
+                    </span>
+                  </div>
+                ))}
+              </Marquee>
+            </div>
 
-            {/* Right gradient - adjusted to match dark background */}
-            <div className='absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-[#000913] to-transparent z-10' />
-          </div>
+            {/* Right gradient */}
+            <div className='absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
+          </motion.div>
         </motion.div>
       </div>
-
-      {/* Enhanced scroll indicator */}
-      <motion.div
-        className='absolute bottom-12 left-1/2 -translate-x-1/2 cursor-pointer'
-        initial={{ opacity: 0.6 }}
-        animate={{ opacity: [0.6, 1, 0.6], y: [0, 10, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        whileHover={{ scale: 1.1 }}
-      >
-        <div className='w-8 h-12 border-2 border-gray-400 rounded-full flex justify-center relative'>
-          <motion.div
-            className='w-1.5 h-1.5 bg-gray-400 rounded-full absolute top-2'
-            animate={{ y: [0, 16, 0] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-        </div>
-      </motion.div>
-    </div>
+    </motion.div>
   );
 };
 
@@ -212,7 +220,7 @@ const JDBuildsPortfolio = () => {
   });
 
   return (
-    <div className='relative min-h-screen bg-black'>
+    <div className='relative min-h-screen bg-black overflow-x-hidden'>
       {/* Hero Section */}
       <HeroSection />
 
