@@ -16,12 +16,19 @@ const TimelineItem = ({
   subtitle,
   description,
   isLeft,
+  details,
 }: {
   title: string;
   subtitle: string;
   description: string | string[];
   isLeft: boolean;
+  details?: {
+    technologies?: string[];
+    achievements?: string[];
+    links?: { text: string; url: string }[];
+  };
 }) => {
+  const [isExpanded, setIsExpanded] = React.useState(false);
   const xOffset = isLeft ? -50 : 50;
 
   return (
@@ -35,11 +42,16 @@ const TimelineItem = ({
         <CircleIndicator />
       </motion.div>
 
-      <div className='w-full px-4'>
+      <motion.div
+        className='w-full px-4 cursor-pointer'
+        onClick={() => setIsExpanded(!isExpanded)}
+        whileHover={{ scale: 1.02 }}
+        transition={{ duration: 0.2 }}
+      >
         <div
           className={`${
             isLeft ? 'mr-auto pr-16 text-right' : 'ml-auto pl-16 text-left'
-          } w-[50%]`}
+          } w-[50%] rounded-xl bg-blue-500/5 hover:bg-blue-500/10 p-6 transition-all duration-300`}
         >
           <motion.h3
             className='text-2xl font-bold text-white'
@@ -57,6 +69,8 @@ const TimelineItem = ({
           >
             {subtitle}
           </motion.p>
+
+          {/* Basic description */}
           {Array.isArray(description) ? (
             description.map((item, index) => (
               <motion.p
@@ -79,8 +93,85 @@ const TimelineItem = ({
               {description}
             </motion.p>
           )}
+
+          {/* Expanded details */}
+          {details && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{
+                height: isExpanded ? 'auto' : 0,
+                opacity: isExpanded ? 1 : 0,
+              }}
+              transition={{ duration: 0.3 }}
+              className='overflow-hidden'
+            >
+              {details.technologies && (
+                <div className='mt-6'>
+                  <h4 className='text-blue-300 font-semibold mb-2'>
+                    Technologies
+                  </h4>
+                  <div className='flex flex-wrap gap-2'>
+                    {details.technologies.map((tech, index) => (
+                      <span
+                        key={index}
+                        className='px-3 py-1 bg-blue-500/20 rounded-full text-sm text-blue-200'
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {details.achievements && (
+                <div className='mt-4'>
+                  <h4 className='text-blue-300 font-semibold mb-2'>
+                    Key Achievements
+                  </h4>
+                  <ul className='list-disc list-inside text-gray-300'>
+                    {details.achievements.map((achievement, index) => (
+                      <li key={index} className='mt-2'>
+                        {achievement}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {details.links && (
+                <div className='mt-4'>
+                  <div className='flex flex-wrap gap-3'>
+                    {details.links.map((link, index) => (
+                      <a
+                        key={index}
+                        href={link.url}
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='inline-flex items-center px-4 py-2 bg-blue-500/30 hover:bg-blue-500/40 rounded-lg text-blue-200 transition-colors duration-300'
+                      >
+                        {link.text}
+                        <svg
+                          className='w-4 h-4 ml-2'
+                          fill='none'
+                          stroke='currentColor'
+                          viewBox='0 0 24 24'
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            strokeWidth={2}
+                            d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'
+                          />
+                        </svg>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          )}
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };
@@ -135,7 +226,7 @@ const HeroSection = () => {
             bounce: 0.3,
           }}
         >
-          Full Stack Developer & Entrepreneur
+          Full Stack Development & Startup Solutions
         </motion.p>
 
         <motion.div
@@ -238,61 +329,210 @@ const JDBuildsPortfolio = () => {
         <div className='relative z-10 mx-auto max-w-7xl flex flex-col gap-32 py-32'>
           <TimelineItem
             title='JD Builds'
-            subtitle='Software Developer, 11/2023 - Present'
+            subtitle='Software Developer • November 2023 - Present'
             description={[
-              'Professional experience building scalable full stack applications from the ground up with Flutter, NextJS, React, Rust, Python, Go, Firebase, MySQL, Postgres, GCP, and Azure',
-              'Contracted by Cashco Financial for software development work, building and maintaining a brand-new fintech app',
+              'Software developer & entrepreneur specializing in building scalable applications from the ground up',
+              'Currently leading development of innovative forest industry solutions while running a successful sports tech company',
+              'Always seeking opportunities to build transformative technology solutions',
             ]}
             isLeft={false}
+            details={{
+              technologies: [
+                'Flutter',
+                'NextJS',
+                'Vercel',
+                'React',
+                'Gatsby',
+                'Netlify',
+                'Vue',
+                'Rust',
+                'Actix Web',
+                'Python',
+                'Flask',
+                'Go',
+                'NodeJS',
+                'Docker',
+                'MySQL',
+                'Postgres',
+                'Firebase',
+                'GCP',
+                'Azure',
+                'Digital Ocean',
+                'Serverless',
+              ],
+              achievements: [
+                'Extensive experience in startup environments',
+                'Expert at bringing ideas to production',
+                'Experience scaling software from zero to thousands of users',
+                'Built and deployed many websites and mobile apps',
+              ],
+              links: [
+                { text: 'GitHub', url: 'https://github.com/jonahduckworth' },
+                {
+                  text: 'LinkedIn',
+                  url: 'https://ca.linkedin.com/in/jonah-duckworth',
+                },
+              ],
+            }}
           />
 
           <TimelineItem
             title='Ref Buddy'
-            subtitle='Founder, 08/2022 - Present'
+            subtitle='Founder • August 2022 - Present'
             description={[
-              'Led the development and launch of a comprehensive officiating tool that streamlines game assignments and performance tracking for sports leagues',
-              'Designed and implemented a user-friendly interface across mobile and web applications',
-              'Spearheaded a targeted sales strategy that significantly increased market penetration and user acquisition',
-              'Brought on a CTO and Senior Software Developer at the beginning of 2024 and commanded a full-stack system rebuild and enhancement operation',
+              'Built and launched a comprehensive officiating platform from concept to market',
+              'Led company through pre-accelerator program, established product-market fit, and executed successful go-to-market strategy',
+              'Scaled from initial concept to multiple league partnerships',
             ]}
             isLeft={true}
+            details={{
+              technologies: [
+                'Flutter',
+                'NextJS',
+                'Vercel',
+                'Go',
+                'Digital Ocean',
+                'Firebase',
+                'Postgres',
+                'Serverless',
+              ],
+              achievements: [
+                'Built entire platform solo before expanding development team',
+                'Scaled to 200+ active users across multiple leagues',
+                'Brought on CTO, Senior Developer, and first Board Member in 2024',
+                'Successfully hit 8-month technical roadmap targets',
+                'Developed and executed complete business strategy including marketing, sales, and customer acquisition',
+              ],
+              links: [{ text: 'Visit Ref Buddy', url: 'https://refbuddy.ca' }],
+            }}
+          />
+
+          <TimelineItem
+            title='Velocity Showcase'
+            subtitle='November 2024'
+            description="Emcee'd live on stage in front of 200+ people for the Alberta Catalyzer Velocity Showcase"
+            isLeft={false}
+            details={{
+              links: [
+                {
+                  text: 'About Velocity Program',
+                  url: 'https://albertacatalyzer.com/velocity',
+                },
+              ],
+            }}
+          />
+
+          <TimelineItem
+            title='MoneyUp'
+            subtitle='Software Developer • December 2023 - October 2024'
+            description={[
+              'Collaborated with a small team of developers to build a fintech startup application from the ground up',
+              'Identified and resolved critical architectural challenges while implementing robust solutions',
+            ]}
+            isLeft={true}
+            details={{
+              technologies: [
+                'Flutter',
+                'NextJS',
+                'Python',
+                'Flask',
+                'Azure',
+                'Postgres',
+                'RevenueCat',
+              ],
+              achievements: [
+                'Implemented critical system architecture improvements',
+                'Developed and optimized cross-platform mobile and web applications',
+                'Contributed to successful scaling of user base through technical optimizations',
+              ],
+              links: [{ text: 'Visit MoneyUp', url: 'https://moneyup.ca' }],
+            }}
+          />
+
+          <TimelineItem
+            title='Telling It Like It Is Podcast'
+            subtitle='March 2024'
+            description='Spoke with Calgary Angel Investor, Jade Alberts, about all the highs and lows that come with bootstrapping a company to success'
+            isLeft={false}
+            details={{
+              links: [
+                {
+                  text: 'Watch Podcast Interview',
+                  url: 'https://www.youtube.com/live/3199SHJxb8U?si=wxqlNTEjbWT0txjN',
+                },
+              ],
+            }}
+          />
+
+          <TimelineItem
+            title='MRU Tech Liftoff Panel'
+            subtitle='January 2024'
+            description='Spoke on a panel of startup tech founders to share experiences of starting your own company'
+            isLeft={true}
+            details={{
+              links: [
+                {
+                  text: 'About Tech Liftoff',
+                  url: 'https://www.mtroyal.ca/ProgramsCourses/FacultiesSchoolsCentres/Business/Institutes/InstituteInnovationEntrepreneurship/Tech-Liftoff-Business.htm',
+                },
+              ],
+            }}
+          />
+
+          <TimelineItem
+            title='Velocity Showcase'
+            subtitle='November 2023'
+            description='Pitched Ref Buddy live on stage in front of 200+ people after completing the Alberta Catalyzer pre-accelerator program'
+            isLeft={false}
+            details={{
+              links: [
+                {
+                  text: 'About Velocity Program',
+                  url: 'https://albertacatalyzer.com/velocity',
+                },
+              ],
+            }}
           />
 
           <TimelineItem
             title='Logit Analytics'
-            subtitle='Software Developer, 05/2022 - 12/2022'
+            subtitle='Software Developer • May 2022 - December 2022'
             description={[
-              'Developed a full-stack feature to provide real-time fire restriction information for loggers in the forestry industry, utilizing Python, React, Firebase, and GCP',
-              "Built Logit's first mobile app, using Flutter",
+              'Developing innovative solutions for the forestry industry',
+              'Building and maintaining full-stack applications for real-time data analytics',
             ]}
-            isLeft={false}
-          />
-
-          <TimelineItem
-            title='British Columbia Hockey League'
-            subtitle='Western Canada Hockey Official'
-            description='Junior A Linesman'
             isLeft={true}
-          />
-
-          {/* Public Speaking Section */}
-          <TimelineItem
-            title='Public Speaking Engagements'
-            subtitle='2023 - 2024'
-            description={[
-              "Emcee'd live on stage in front of 200+ people for the Alberta Catalyzer Velocity Showcase (11/2024)",
-              'Spoke with Calgary Angel Investor, Jade Alberts, about bootstrapping a company to success on Telling It Like It Is Podcast (03/2024)',
-              'Spoke on a panel of startup tech founders at MRU Tech Liftoff Panel (01/2024)',
-              'Pitched Ref Buddy live on stage at Velocity Showcase (11/2023)',
-            ]}
-            isLeft={false}
+            details={{
+              technologies: [
+                'Flutter',
+                'React',
+                'Python',
+                'Flask',
+                'Firebase',
+                'GCP',
+              ],
+              achievements: [
+                'Developed real-time fire restriction information system for loggers',
+                "Built company's first mobile application using Flutter",
+                'Implemented full-stack features for forestry industry solutions',
+              ],
+              links: [{ text: 'Visit Logit', url: 'https://logitnow.ca' }],
+            }}
           />
 
           <TimelineItem
             title='Education'
-            subtitle='Thompson Rivers University, Kamloops, BC'
-            description="Bachelor's Degree in Computing Science (05/2022)"
-            isLeft={true}
+            subtitle='Thompson Rivers University • May 2022'
+            description="Bachelor's Degree in Computing Science"
+            isLeft={false}
+            details={{
+              links: [
+                {
+                  text: 'Visit TRU',
+                  url: 'https://tru.ca',
+                },
+              ],
+            }}
           />
         </div>
       </div>
