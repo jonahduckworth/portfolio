@@ -6,7 +6,7 @@ import Marquee from '@/components/Marquee';
 import AnimatedBackground from './components/AnimatedBackground';
 
 const CircleIndicator = () => (
-  <div className='absolute flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 -translate-x-1/2 -translate-y-1/2 left-[calc(50%+11px)]'>
+  <div className='absolute flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 -translate-x-1/2 -translate-y-1/2'>
     <div className='h-4 w-4 rounded-full bg-white' />
   </div>
 );
@@ -34,7 +34,7 @@ const TimelineItem = ({
   return (
     <div className='relative flex w-full items-center justify-center'>
       <motion.div
-        className='absolute left-1/2 top-1/2'
+        className='absolute top-1/2 left-[20px] md:left-1/2'
         initial={{ opacity: 0, x: xOffset }}
         whileInView={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5 }}
@@ -49,9 +49,16 @@ const TimelineItem = ({
         transition={{ duration: 0.2 }}
       >
         <div
-          className={`${
-            isLeft ? 'mr-auto pr-16 text-right' : 'ml-auto pl-16 text-left'
-          } w-[50%] rounded-xl bg-blue-500/5 hover:bg-blue-500/10 p-6 transition-all duration-300`}
+          className={`
+            w-[85%] rounded-xl bg-blue-500/5 hover:bg-blue-500/10 p-6 transition-all duration-300
+            ml-auto pl-8 text-left
+            md:w-[50%] 
+            ${
+              isLeft
+                ? 'md:ml-0 md:mr-auto md:pr-16 md:pl-8 md:text-right'
+                : 'md:ml-auto md:pl-16 md:text-left'
+            }
+          `}
         >
           <motion.h3
             className='text-2xl font-bold text-white'
@@ -196,13 +203,13 @@ const HeroSection = () => {
   return (
     <motion.div
       style={{ opacity }}
-      className='relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8'
+      className='relative min-h-screen flex items-center justify-center overflow-hidden px-2 sm:px-6 lg:px-8'
     >
       <AnimatedBackground />
 
       <div className='relative z-10 text-center max-w-7xl mx-auto'>
         <motion.h1
-          className='text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-400'
+          className='text-2xl sm:text-4xl md:text-7xl font-bold mb-3 sm:mb-6'
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -212,11 +219,24 @@ const HeroSection = () => {
             bounce: 0.4,
           }}
         >
-          JD Builds
+          <div className='relative text-6xl font-bold mb-8'>
+            <span className='relative inline-block'>
+              <span className='animate-gradient-x bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-blue-100 to-blue-600'>
+                JD
+              </span>
+              <div className='absolute inset-0 blur-[20px] animate-glow bg-blue-400/20' />
+            </span>
+            <span className='relative inline-block ml-4'>
+              <span className='animate-gradient-x bg-clip-text text-transparent bg-gradient-to-r from-blue-100 via-blue-600 to-blue-100'>
+                Builds
+              </span>
+              <div className='absolute inset-0 blur-[20px] animate-glow bg-blue-400/20' />
+            </span>
+          </div>
         </motion.h1>
 
-        <motion.p
-          className='text-lg sm:text-xl text-gray-300 mb-12 max-w-2xl mx-auto'
+        <motion.div
+          className='text-sm sm:text-base md:text-lg text-gray-300 mb-16 max-w-2xl mx-auto space-y-1.5 sm:space-y-2 px-2 sm:px-3'
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -226,54 +246,71 @@ const HeroSection = () => {
             bounce: 0.3,
           }}
         >
-          Full Stack Development & Startup Solutions
-        </motion.p>
+          <p className='font-mono'>
+            <span className='text-blue-400'>const</span>{' '}
+            <span className='text-green-400'>expertise</span>{' '}
+            <span className='text-blue-400'>=</span>{' '}
+            <span className='text-orange-400'>
+              &apos;Full Stack Development&apos;
+            </span>
+          </p>
+          <p className='font-mono'>
+            <span className='text-blue-400'>const</span>{' '}
+            <span className='text-green-400'>focus</span>{' '}
+            <span className='text-blue-400'>=</span>{' '}
+            <span className='text-orange-400'>
+              &apos;Startup Solutions&apos;
+            </span>
+          </p>
+          <p className='font-mono text-blue-300 opacity-75'>
+            <span className='text-gray-500'>
+              {'// Bringing ideas to production'}
+            </span>
+          </p>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.9 }}
-          className='w-full sm:w-3/4 md:w-1/2 mx-auto relative mt-20'
+          className='w-full sm:w-[90%] md:w-2/3 mx-auto relative mt-8 sm:mt-16'
         >
-          {/* First Marquee Container */}
+          {/* Frontend Skills Track */}
           <motion.div
-            className='relative overflow-hidden px-1 my-4'
+            className='relative overflow-hidden px-1 my-1.5 sm:my-4'
             initial={{ x: 100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 1.2, delay: 1.2 }}
           >
-            {/* Left gradient */}
-            <div className='absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
-
+            <div className='absolute left-0 top-0 h-full w-20 sm:w-32 bg-gradient-to-r from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
             <div className='relative'>
               <Marquee pauseOnHover speed={40} className='[--duration:15s]'>
                 {frontEndSkills.map((skill) => (
                   <div
                     key={skill}
-                    className='px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-full backdrop-blur-sm mx-2 transition-colors duration-300'
+                    className='px-1.5 sm:px-4 py-1 sm:py-2 mx-1 sm:mx-2 group relative'
                   >
-                    <span className='text-blue-300 hover:text-blue-200 whitespace-nowrap'>
-                      {skill}
-                    </span>
+                    <div className='absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-[2px] sm:blur-sm group-hover:blur-md transition-all duration-300' />
+                    <div className='relative flex items-center space-x-1 sm:space-x-2 bg-black/50 px-4 md:px-6 py-2 rounded-full backdrop-blur-sm border border-blue-500/20 group-hover:border-blue-400/40 transition-colors duration-300'>
+                      <span className='text-xs sm:text-base text-blue-300 group-hover:text-blue-200 whitespace-nowrap font-semibold'>
+                        {skill}
+                      </span>
+                    </div>
                   </div>
                 ))}
               </Marquee>
             </div>
-
-            {/* Right gradient */}
-            <div className='absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
+            <div className='absolute right-0 top-0 h-full w-20 sm:w-32 bg-gradient-to-l from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
           </motion.div>
 
-          {/* Second Marquee Container */}
+          {/* Backend Skills Track */}
           <motion.div
-            className='relative overflow-hidden px-1 my-4'
+            className='relative overflow-hidden px-1 my-1.5 sm:my-4'
             initial={{ x: -100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 1.2, delay: 1.5 }}
           >
-            {/* Left gradient */}
-            <div className='absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
-
+            <div className='absolute left-0 top-0 h-full w-20 sm:w-32 bg-gradient-to-r from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
             <div className='relative'>
               <Marquee
                 reverse
@@ -284,18 +321,19 @@ const HeroSection = () => {
                 {backEndSkills.map((skill) => (
                   <div
                     key={skill}
-                    className='px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-full backdrop-blur-sm mx-2 transition-colors duration-300'
+                    className='px-1.5 sm:px-4 py-1 sm:py-2 mx-1 sm:mx-2 group relative'
                   >
-                    <span className='text-blue-300 hover:text-blue-200 whitespace-nowrap'>
-                      {skill}
-                    </span>
+                    <div className='absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full blur-[2px] sm:blur-sm group-hover:blur-md transition-all duration-300' />
+                    <div className='relative flex items-center space-x-1 sm:space-x-2 bg-black/50 px-4 md:px-6 py-2 rounded-full backdrop-blur-sm border border-purple-500/20 group-hover:border-purple-400/40 transition-colors duration-300'>
+                      <span className='text-xs sm:text-base text-purple-300 group-hover:text-purple-200 whitespace-nowrap font-semibold'>
+                        {skill}
+                      </span>
+                    </div>
                   </div>
                 ))}
               </Marquee>
             </div>
-
-            {/* Right gradient */}
-            <div className='absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
+            <div className='absolute right-0 top-0 h-full w-20 sm:w-32 bg-gradient-to-l from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
           </motion.div>
         </motion.div>
       </div>
@@ -316,10 +354,10 @@ const JDBuildsPortfolio = () => {
       <HeroSection />
 
       {/* Timeline Container */}
-      <div className='relative pb-56' ref={containerRef}>
+      <div className='relative pb-36 sm:pb-56' ref={containerRef}>
         {/* Timeline line */}
         <motion.div
-          className='absolute left-[calc(50%+11px)] h-full w-0.5 bg-blue-500 origin-top'
+          className='absolute left-[20px] md:left-1/2 h-full w-0.5 bg-blue-500 origin-top'
           style={{
             scaleY: scrollYProgress,
           }}
