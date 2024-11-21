@@ -203,13 +203,13 @@ const HeroSection = () => {
   return (
     <motion.div
       style={{ opacity }}
-      className='relative min-h-screen flex items-center justify-center overflow-hidden px-2 sm:px-6 lg:px-8'
+      className='relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8'
     >
       <AnimatedBackground />
 
       <div className='relative z-10 text-center max-w-7xl mx-auto'>
         <motion.h1
-          className='text-2xl sm:text-4xl md:text-7xl font-bold mb-3 sm:mb-6'
+          className='text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-400'
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{
@@ -273,44 +273,44 @@ const HeroSection = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1, delay: 0.9 }}
-          className='w-full sm:w-[90%] md:w-2/3 mx-auto relative mt-8 sm:mt-16'
+          className='w-full sm:w-3/4 md:w-1/2 mx-auto relative mt-20'
         >
-          {/* Frontend Skills Track */}
+          {/* First Marquee Container */}
           <motion.div
-            className='relative overflow-hidden px-1 my-1.5 sm:my-4'
+            className='relative overflow-hidden px-1 my-4'
             initial={{ x: 100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 1.2, delay: 1.2 }}
           >
-            <div className='absolute left-0 top-0 h-full w-20 sm:w-32 bg-gradient-to-r from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
+            {/* Left gradient */}
+            <div className='absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
             <div className='relative'>
               <Marquee pauseOnHover speed={40} className='[--duration:15s]'>
                 {frontEndSkills.map((skill) => (
                   <div
                     key={skill}
-                    className='px-1.5 sm:px-4 py-1 sm:py-2 mx-1 sm:mx-2 group relative'
+                    className='px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-full backdrop-blur-sm mx-2 transition-colors duration-300'
                   >
-                    <div className='absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-full blur-[2px] sm:blur-sm group-hover:blur-md transition-all duration-300' />
-                    <div className='relative flex items-center space-x-1 sm:space-x-2 bg-black/50 px-4 md:px-6 py-2 rounded-full backdrop-blur-sm border border-blue-500/20 group-hover:border-blue-400/40 transition-colors duration-300'>
-                      <span className='text-xs sm:text-base text-blue-300 group-hover:text-blue-200 whitespace-nowrap font-semibold'>
-                        {skill}
-                      </span>
-                    </div>
+                    <span className='text-blue-300 hover:text-blue-200 whitespace-nowrap'>
+                      {skill}
+                    </span>
                   </div>
                 ))}
               </Marquee>
             </div>
-            <div className='absolute right-0 top-0 h-full w-20 sm:w-32 bg-gradient-to-l from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
+            {/* Right gradient */}
+            <div className='absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
           </motion.div>
 
-          {/* Backend Skills Track */}
+          {/* Second Marquee Container */}
           <motion.div
-            className='relative overflow-hidden px-1 my-1.5 sm:my-4'
+            className='relative overflow-hidden px-1 my-4'
             initial={{ x: -100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 1.2, delay: 1.5 }}
           >
-            <div className='absolute left-0 top-0 h-full w-20 sm:w-32 bg-gradient-to-r from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
+            {/* Left gradient */}
+            <div className='absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
             <div className='relative'>
               <Marquee
                 reverse
@@ -321,19 +321,17 @@ const HeroSection = () => {
                 {backEndSkills.map((skill) => (
                   <div
                     key={skill}
-                    className='px-1.5 sm:px-4 py-1 sm:py-2 mx-1 sm:mx-2 group relative'
+                    className='px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-full backdrop-blur-sm mx-2 transition-colors duration-300'
                   >
-                    <div className='absolute inset-0 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-full blur-[2px] sm:blur-sm group-hover:blur-md transition-all duration-300' />
-                    <div className='relative flex items-center space-x-1 sm:space-x-2 bg-black/50 px-4 md:px-6 py-2 rounded-full backdrop-blur-sm border border-purple-500/20 group-hover:border-purple-400/40 transition-colors duration-300'>
-                      <span className='text-xs sm:text-base text-purple-300 group-hover:text-purple-200 whitespace-nowrap font-semibold'>
-                        {skill}
-                      </span>
-                    </div>
+                    <span className='text-blue-300 hover:text-blue-200 whitespace-nowrap'>
+                      {skill}
+                    </span>
                   </div>
                 ))}
               </Marquee>
             </div>
-            <div className='absolute right-0 top-0 h-full w-20 sm:w-32 bg-gradient-to-l from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
+            {/* Right gradient */}
+            <div className='absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
           </motion.div>
         </motion.div>
       </div>
