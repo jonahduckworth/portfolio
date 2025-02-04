@@ -1,15 +1,8 @@
 'use client';
 
-import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import Marquee from '@/components/Marquee';
+import React, { useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import AnimatedBackground from './components/AnimatedBackground';
-
-const CircleIndicator = () => (
-  <div className='absolute flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 -translate-x-1/2 -translate-y-1/2'>
-    <div className='h-4 w-4 rounded-full bg-white' />
-  </div>
-);
 
 const TimelineItem = ({
   title,
@@ -32,16 +25,7 @@ const TimelineItem = ({
   const xOffset = isLeft ? -50 : 50;
 
   return (
-    <div className='relative flex w-full items-center justify-center'>
-      <motion.div
-        className='absolute top-1/2 left-[20px] md:left-1/2'
-        initial={{ opacity: 0, x: xOffset }}
-        whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-        <CircleIndicator />
-      </motion.div>
-
+    <div className='relative flex w-full items-center justify-center min-h-screen'>
       <motion.div
         className='w-full px-4 cursor-pointer'
         onClick={() => setIsExpanded(!isExpanded)}
@@ -50,13 +34,12 @@ const TimelineItem = ({
       >
         <div
           className={`
-            w-[85%] rounded-xl bg-blue-500/5 hover:bg-blue-500/10 p-6 transition-all duration-300
-            ml-auto pl-8 text-left
-            md:w-[50%] 
+            w-[85%] rounded-xl bg-blue-500/50 hover:bg-blue-500 p-6 transition-all duration-300
+            md:w-[40%]
             ${
               isLeft
-                ? 'md:ml-0 md:mr-auto md:pr-16 md:pl-8 md:text-right'
-                : 'md:ml-auto md:pl-16 md:text-left'
+                ? 'md:mr-[52%] md:ml-auto md:pr-16 md:pl-8 md:text-right'
+                : 'md:ml-[52%] md:pl-16 md:text-left'
             }
           `}
         >
@@ -184,27 +167,8 @@ const TimelineItem = ({
 };
 
 const HeroSection = () => {
-  const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
-
-  const frontEndSkills = ['Flutter', 'NextJS', 'React', 'Gatsby', 'Vue'];
-  const backEndSkills = [
-    'Rust',
-    'NodeJS',
-    'Go',
-    'Python',
-    'Firebase',
-    'MySQL',
-    'Postgres',
-    'GCP',
-    'Azure',
-  ];
-
   return (
-    <motion.div
-      style={{ opacity }}
-      className='relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8'
-    >
+    <motion.div className='relative min-h-screen flex items-start pt-32 justify-center overflow-hidden px-4 sm:px-6 lg:px-8'>
       <AnimatedBackground />
 
       <div className='relative z-10 text-center max-w-7xl mx-auto'>
@@ -268,308 +232,330 @@ const HeroSection = () => {
             </span>
           </p>
         </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.9 }}
-          className='w-full sm:w-3/4 md:w-1/2 mx-auto relative mt-20'
-        >
-          {/* First Marquee Container */}
-          <motion.div
-            className='relative overflow-hidden px-1 my-4'
-            initial={{ x: 100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 1.2, delay: 1.2 }}
-          >
-            {/* Left gradient */}
-            <div className='absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
-            <div className='relative'>
-              <Marquee pauseOnHover speed={40} className='[--duration:15s]'>
-                {frontEndSkills.map((skill) => (
-                  <div
-                    key={skill}
-                    className='px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-full backdrop-blur-sm mx-2 transition-colors duration-300'
-                  >
-                    <span className='text-blue-300 hover:text-blue-200 whitespace-nowrap'>
-                      {skill}
-                    </span>
-                  </div>
-                ))}
-              </Marquee>
-            </div>
-            {/* Right gradient */}
-            <div className='absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
-          </motion.div>
-
-          {/* Second Marquee Container */}
-          <motion.div
-            className='relative overflow-hidden px-1 my-4'
-            initial={{ x: -100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 1.2, delay: 1.5 }}
-          >
-            {/* Left gradient */}
-            <div className='absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
-            <div className='relative'>
-              <Marquee
-                reverse
-                pauseOnHover
-                speed={30}
-                className='[--duration:25s]'
-              >
-                {backEndSkills.map((skill) => (
-                  <div
-                    key={skill}
-                    className='px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-full backdrop-blur-sm mx-2 transition-colors duration-300'
-                  >
-                    <span className='text-blue-300 hover:text-blue-200 whitespace-nowrap'>
-                      {skill}
-                    </span>
-                  </div>
-                ))}
-              </Marquee>
-            </div>
-            {/* Right gradient */}
-            <div className='absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
-          </motion.div>
-        </motion.div>
       </div>
     </motion.div>
   );
 };
 
 const JDBuildsPortfolio = () => {
-  const containerRef = React.useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end center'],
-  });
+  const containerRef = useRef<HTMLDivElement>(null);
+  const timelineRefs = useRef<HTMLDivElement[]>([]);
+  const [isScrolling, setIsScrolling] = React.useState(false);
+  const currentIndexRef = useRef(0);
+
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+
+      if (isScrolling) return;
+
+      const direction = e.deltaY > 0 ? 1 : -1;
+
+      const newIndex = Math.max(
+        0,
+        Math.min(
+          currentIndexRef.current + direction,
+          timelineRefs.current.length - 1
+        )
+      );
+      if (newIndex === currentIndexRef.current) return;
+
+      currentIndexRef.current = newIndex;
+      setIsScrolling(true);
+
+      const targetItem = timelineRefs.current[newIndex];
+      if (!targetItem) return;
+
+      // Calculate the target position to exactly center the item
+      const targetPosition = targetItem.offsetTop;
+
+      // Quick, direct scroll with minimal animation
+      const duration = 400;
+      const startPosition = window.scrollY;
+      const distance = targetPosition - startPosition;
+      const startTime = performance.now();
+
+      const easeOutQuart = (t: number): number => {
+        return 1 - Math.pow(1 - t, 4);
+      };
+
+      const animateScroll = (currentTime: number) => {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeProgress = easeOutQuart(progress);
+
+        window.scrollTo(0, startPosition + distance * easeProgress);
+
+        if (progress < 1) {
+          requestAnimationFrame(animateScroll);
+        } else {
+          setTimeout(() => {
+            setIsScrolling(false);
+          }, 50);
+        }
+      };
+
+      requestAnimationFrame(animateScroll);
+    };
+
+    const container = containerRef.current;
+    if (container) {
+      container.addEventListener('wheel', handleWheel, { passive: false });
+    }
+
+    return () => {
+      if (container) {
+        container.removeEventListener('wheel', handleWheel);
+      }
+    };
+  }, [isScrolling]);
+
+  // Add ref to timeline items
+  const addToRefs = (el: HTMLDivElement) => {
+    if (el && !timelineRefs.current.includes(el)) {
+      timelineRefs.current.push(el);
+    }
+  };
 
   return (
-    <div className='relative min-h-screen bg-black overflow-x-hidden'>
+    <div
+      className='relative min-h-screen bg-black overflow-x-hidden'
+      ref={containerRef}
+    >
       {/* Hero Section */}
       <HeroSection />
 
       {/* Timeline Container */}
-      <div className='relative pb-36 sm:pb-56' ref={containerRef}>
-        {/* Timeline line */}
-        <motion.div
-          className='absolute left-[20px] md:left-1/2 h-full w-0.5 bg-blue-500 origin-top'
-          style={{
-            scaleY: scrollYProgress,
-          }}
-        />
-
+      <div className='relative'>
         {/* Timeline Items */}
-        <div className='relative z-10 mx-auto max-w-7xl flex flex-col gap-32 py-32'>
-          <TimelineItem
-            title='JD Builds'
-            subtitle='Software Developer • November 2023 - Present'
-            description={[
-              'Software developer & entrepreneur specializing in building scalable applications from the ground up',
-              'Currently leading development of innovative forest industry solutions while running a successful sports tech company',
-              'Always seeking opportunities to build transformative technology solutions',
-            ]}
-            isLeft={false}
-            details={{
-              technologies: [
-                'Flutter',
-                'NextJS',
-                'Vercel',
-                'React',
-                'Gatsby',
-                'Netlify',
-                'Vue',
-                'Rust',
-                'Actix Web',
-                'Python',
-                'Flask',
-                'Go',
-                'NodeJS',
-                'Docker',
-                'MySQL',
-                'Postgres',
-                'Firebase',
-                'GCP',
-                'Azure',
-                'Digital Ocean',
-                'Serverless',
-              ],
-              achievements: [
-                'Extensive experience in startup environments',
-                'Expert at bringing ideas to production',
-                'Experience scaling software from zero to thousands of users',
-                'Built and deployed many websites and mobile apps',
-              ],
-              links: [
-                { text: 'GitHub', url: 'https://github.com/jonahduckworth' },
-                {
-                  text: 'LinkedIn',
-                  url: 'https://ca.linkedin.com/in/jonah-duckworth',
-                },
-              ],
-            }}
-          />
+        <div className='relative z-10 mx-auto max-w-7xl flex flex-col'>
+          <div ref={addToRefs}>
+            <TimelineItem
+              title='JD Builds'
+              subtitle='Software Developer • November 2023 - Present'
+              description={[
+                'Software developer & entrepreneur specializing in building scalable applications from the ground up',
+                'Currently leading development of innovative forest industry solutions while running a successful sports tech company',
+                'Always seeking opportunities to build transformative technology solutions',
+              ]}
+              isLeft={false}
+              details={{
+                technologies: [
+                  'Flutter',
+                  'NextJS',
+                  'Vercel',
+                  'React',
+                  'Gatsby',
+                  'Netlify',
+                  'Vue',
+                  'Rust',
+                  'Actix Web',
+                  'Python',
+                  'Flask',
+                  'Go',
+                  'NodeJS',
+                  'Docker',
+                  'MySQL',
+                  'Postgres',
+                  'Firebase',
+                  'GCP',
+                  'Azure',
+                  'Digital Ocean',
+                  'Serverless',
+                ],
+                achievements: [
+                  'Extensive experience in startup environments',
+                  'Expert at bringing ideas to production',
+                  'Experience scaling software from zero to thousands of users',
+                  'Built and deployed many websites and mobile apps',
+                ],
+                links: [
+                  { text: 'GitHub', url: 'https://github.com/jonahduckworth' },
+                  {
+                    text: 'LinkedIn',
+                    url: 'https://ca.linkedin.com/in/jonah-duckworth',
+                  },
+                ],
+              }}
+            />
+          </div>
 
-          <TimelineItem
-            title='Ref Buddy'
-            subtitle='Founder • August 2022 - Present'
-            description={[
-              'Built and launched a comprehensive officiating platform from concept to market',
-              'Led company through pre-accelerator program, established product-market fit, and executed successful go-to-market strategy',
-              'Scaled from initial concept to multiple league partnerships',
-            ]}
-            isLeft={true}
-            details={{
-              technologies: [
-                'Flutter',
-                'NextJS',
-                'Vercel',
-                'Go',
-                'Digital Ocean',
-                'Firebase',
-                'Postgres',
-                'Serverless',
-              ],
-              achievements: [
-                'Built entire platform solo before expanding development team',
-                'Scaled to 200+ active users across multiple leagues',
-                'Brought on CTO, Senior Developer, and first Board Member in 2024',
-                'Successfully hit 8-month technical roadmap targets',
-                'Developed and executed complete business strategy including marketing, sales, and customer acquisition',
-              ],
-              links: [{ text: 'Visit Ref Buddy', url: 'https://refbuddy.ca' }],
-            }}
-          />
+          <div ref={addToRefs}>
+            <TimelineItem
+              title='Ref Buddy'
+              subtitle='Founder • August 2022 - Present'
+              description={[
+                'Built and launched a comprehensive officiating platform from concept to market',
+                'Led company through pre-accelerator program, established product-market fit, and executed successful go-to-market strategy',
+                'Scaled from initial concept to multiple league partnerships',
+              ]}
+              isLeft={true}
+              details={{
+                technologies: [
+                  'Flutter',
+                  'NextJS',
+                  'Vercel',
+                  'Go',
+                  'Digital Ocean',
+                  'Firebase',
+                  'Postgres',
+                  'Serverless',
+                ],
+                achievements: [
+                  'Built entire platform solo before expanding development team',
+                  'Scaled to 200+ active users across multiple leagues',
+                  'Brought on CTO, Senior Developer, and first Board Member in 2024',
+                  'Successfully hit 8-month technical roadmap targets',
+                  'Developed and executed complete business strategy including marketing, sales, and customer acquisition',
+                ],
+                links: [
+                  { text: 'Visit Ref Buddy', url: 'https://refbuddy.ca' },
+                ],
+              }}
+            />
+          </div>
 
-          <TimelineItem
-            title='Velocity Showcase'
-            subtitle='November 2024'
-            description="Emcee'd live on stage in front of 200+ people for the Alberta Catalyzer Velocity Showcase"
-            isLeft={false}
-            details={{
-              links: [
-                {
-                  text: 'About Velocity Program',
-                  url: 'https://albertacatalyzer.com/velocity',
-                },
-              ],
-            }}
-          />
+          <div ref={addToRefs}>
+            <TimelineItem
+              title='Velocity Showcase'
+              subtitle='November 2024'
+              description="Emcee'd live on stage in front of 200+ people for the Alberta Catalyzer Velocity Showcase"
+              isLeft={false}
+              details={{
+                links: [
+                  {
+                    text: 'About Velocity Program',
+                    url: 'https://albertacatalyzer.com/velocity',
+                  },
+                ],
+              }}
+            />
+          </div>
 
-          <TimelineItem
-            title='MoneyUp'
-            subtitle='Software Developer • December 2023 - October 2024'
-            description={[
-              'Collaborated with a small team of developers to build a fintech startup application from the ground up',
-              'Identified and resolved critical architectural challenges while implementing robust solutions',
-            ]}
-            isLeft={true}
-            details={{
-              technologies: [
-                'Flutter',
-                'NextJS',
-                'Python',
-                'Flask',
-                'Azure',
-                'Postgres',
-                'RevenueCat',
-              ],
-              achievements: [
-                'Implemented critical system architecture improvements',
-                'Developed and optimized cross-platform mobile and web applications',
-                'Contributed to successful scaling of user base through technical optimizations',
-              ],
-              links: [{ text: 'Visit MoneyUp', url: 'https://moneyup.ca' }],
-            }}
-          />
+          <div ref={addToRefs}>
+            <TimelineItem
+              title='MoneyUp'
+              subtitle='Software Developer • December 2023 - October 2024'
+              description={[
+                'Collaborated with a small team of developers to build a fintech startup application from the ground up',
+                'Identified and resolved critical architectural challenges while implementing robust solutions',
+              ]}
+              isLeft={true}
+              details={{
+                technologies: [
+                  'Flutter',
+                  'NextJS',
+                  'Python',
+                  'Flask',
+                  'Azure',
+                  'Postgres',
+                  'RevenueCat',
+                ],
+                achievements: [
+                  'Implemented critical system architecture improvements',
+                  'Developed and optimized cross-platform mobile and web applications',
+                  'Contributed to successful scaling of user base through technical optimizations',
+                ],
+                links: [{ text: 'Visit MoneyUp', url: 'https://moneyup.ca' }],
+              }}
+            />
+          </div>
 
-          <TimelineItem
-            title='Telling It Like It Is Podcast'
-            subtitle='March 2024'
-            description='Spoke with Calgary Angel Investor, Jade Alberts, about all the highs and lows that come with bootstrapping a company to success'
-            isLeft={false}
-            details={{
-              links: [
-                {
-                  text: 'Watch Podcast Interview',
-                  url: 'https://www.youtube.com/live/3199SHJxb8U?si=wxqlNTEjbWT0txjN',
-                },
-              ],
-            }}
-          />
+          <div ref={addToRefs}>
+            <TimelineItem
+              title='Telling It Like It Is Podcast'
+              subtitle='March 2024'
+              description='Spoke with Calgary Angel Investor, Jade Alberts, about all the highs and lows that come with bootstrapping a company to success'
+              isLeft={false}
+              details={{
+                links: [
+                  {
+                    text: 'Watch Podcast Interview',
+                    url: 'https://www.youtube.com/live/3199SHJxb8U?si=wxqlNTEjbWT0txjN',
+                  },
+                ],
+              }}
+            />
+          </div>
 
-          <TimelineItem
-            title='MRU Tech Liftoff Panel'
-            subtitle='January 2024'
-            description='Spoke on a panel of startup tech founders to share experiences of starting your own company'
-            isLeft={true}
-            details={{
-              links: [
-                {
-                  text: 'About Tech Liftoff',
-                  url: 'https://www.mtroyal.ca/ProgramsCourses/FacultiesSchoolsCentres/Business/Institutes/InstituteInnovationEntrepreneurship/Tech-Liftoff-Business.htm',
-                },
-              ],
-            }}
-          />
+          <div ref={addToRefs}>
+            <TimelineItem
+              title='MRU Tech Liftoff Panel'
+              subtitle='January 2024'
+              description='Spoke on a panel of startup tech founders to share experiences of starting your own company'
+              isLeft={true}
+              details={{
+                links: [
+                  {
+                    text: 'About Tech Liftoff',
+                    url: 'https://www.mtroyal.ca/ProgramsCourses/FacultiesSchoolsCentres/Business/Institutes/InstituteInnovationEntrepreneurship/Tech-Liftoff-Business.htm',
+                  },
+                ],
+              }}
+            />
+          </div>
 
-          <TimelineItem
-            title='Velocity Showcase'
-            subtitle='November 2023'
-            description='Pitched Ref Buddy live on stage in front of 200+ people after completing the Alberta Catalyzer pre-accelerator program'
-            isLeft={false}
-            details={{
-              links: [
-                {
-                  text: 'About Velocity Program',
-                  url: 'https://albertacatalyzer.com/velocity',
-                },
-              ],
-            }}
-          />
+          <div ref={addToRefs}>
+            <TimelineItem
+              title='Velocity Showcase'
+              subtitle='November 2023'
+              description='Pitched Ref Buddy live on stage in front of 200+ people after completing the Alberta Catalyzer pre-accelerator program'
+              isLeft={false}
+              details={{
+                links: [
+                  {
+                    text: 'About Velocity Program',
+                    url: 'https://albertacatalyzer.com/velocity',
+                  },
+                ],
+              }}
+            />
+          </div>
 
-          <TimelineItem
-            title='Logit Analytics'
-            subtitle='Software Developer • May 2022 - December 2022'
-            description={[
-              'Developing innovative solutions for the forestry industry',
-              'Building and maintaining full-stack applications for real-time data analytics',
-            ]}
-            isLeft={true}
-            details={{
-              technologies: [
-                'Flutter',
-                'React',
-                'Python',
-                'Flask',
-                'Firebase',
-                'GCP',
-              ],
-              achievements: [
-                'Developed real-time fire restriction information system for loggers',
-                "Built company's first mobile application using Flutter",
-                'Implemented full-stack features for forestry industry solutions',
-              ],
-              links: [{ text: 'Visit Logit', url: 'https://logitnow.ca' }],
-            }}
-          />
+          <div ref={addToRefs}>
+            <TimelineItem
+              title='Logit Analytics'
+              subtitle='Software Developer • May 2022 - December 2022'
+              description={[
+                'Developing innovative solutions for the forestry industry',
+                'Building and maintaining full-stack applications for real-time data analytics',
+              ]}
+              isLeft={true}
+              details={{
+                technologies: [
+                  'Flutter',
+                  'React',
+                  'Python',
+                  'Flask',
+                  'Firebase',
+                  'GCP',
+                ],
+                achievements: [
+                  'Developed real-time fire restriction information system for loggers',
+                  "Built company's first mobile application using Flutter",
+                  'Implemented full-stack features for forestry industry solutions',
+                ],
+                links: [{ text: 'Visit Logit', url: 'https://logitnow.ca' }],
+              }}
+            />
+          </div>
 
-          <TimelineItem
-            title='Education'
-            subtitle='Thompson Rivers University • May 2022'
-            description="Bachelor's Degree in Computing Science"
-            isLeft={false}
-            details={{
-              links: [
-                {
-                  text: 'Visit TRU',
-                  url: 'https://tru.ca',
-                },
-              ],
-            }}
-          />
+          <div ref={addToRefs}>
+            <TimelineItem
+              title='Education'
+              subtitle='Thompson Rivers University • May 2022'
+              description="Bachelor's Degree in Computing Science"
+              isLeft={false}
+              details={{
+                links: [
+                  {
+                    text: 'Visit TRU',
+                    url: 'https://tru.ca',
+                  },
+                ],
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>
