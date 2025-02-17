@@ -29,156 +29,214 @@ const TimelineItem = ({
   };
 }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
-  const xOffset = isLeft ? -50 : 50;
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const getInitialX = () => {
+    if (isMobile) return 20;
+    return isLeft ? -20 : 20;
+  };
+
+  const getInitialTextX = () => {
+    if (isMobile) return 50;
+    return isLeft ? -50 : 50;
+  };
 
   return (
     <div className='relative flex w-full items-center justify-center'>
       <motion.div
-        className='absolute top-1/2 left-[20px] md:left-1/2'
-        initial={{ opacity: 0, x: xOffset }}
-        whileInView={{ opacity: 1, x: 0 }}
+        className='absolute top-1/2 left-[31px] md:left-1/2 -translate-y-1/2 md:-translate-x-1/2'
+        initial={{ opacity: 0, x: getInitialX() }}
+        whileInView={{
+          opacity: 1,
+          x: 0,
+        }}
         transition={{ duration: 0.5 }}
       >
         <CircleIndicator />
       </motion.div>
 
-      <motion.div
-        className='w-full px-4 cursor-pointer'
-        onClick={() => setIsExpanded(!isExpanded)}
-        whileHover={{ scale: 1.02 }}
-        transition={{ duration: 0.2 }}
-      >
-        <div
+      <div className={`w-full grid grid-cols-1 md:grid-cols-[1fr,1fr] gap-4`}>
+        <motion.div
           className={`
-            w-[85%] rounded-xl bg-blue-500/5 hover:bg-blue-500/10 p-6 transition-all duration-300
-            ml-auto pl-8 text-left
-            md:w-[50%] 
-            ${
-              isLeft
-                ? 'md:ml-0 md:mr-auto md:pr-16 md:pl-8 md:text-right'
-                : 'md:ml-auto md:pl-16 md:text-left'
-            }
+            cursor-pointer
+            ${isLeft ? 'md:col-start-1' : 'md:col-start-2'}
+            pl-14 pr-6 md:pl-0 md:pr-0
+            ${!isLeft && 'col-span-1'}
+            ${isLeft ? 'md:mr-16' : 'md:ml-16'}
           `}
+          onClick={() => setIsExpanded(!isExpanded)}
+          whileHover={{ scale: 1.02 }}
+          transition={{ duration: 0.2 }}
         >
-          <motion.h3
-            className='text-2xl font-bold text-white'
-            initial={{ opacity: 0, x: xOffset }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+          <div
+            className={`
+              rounded-xl bg-blue-500/5 hover:bg-blue-500/10 p-6 transition-all duration-300
+              group relative w-full
+              border border-blue-500/20 hover:border-blue-500/40
+              text-left md:text-left
+              ${
+                isLeft
+                  ? 'md:text-right md:rounded-l-[32px]'
+                  : 'md:rounded-r-[32px]'
+              }
+            `}
           >
-            {title}
-          </motion.h3>
-          <motion.p
-            className='mt-2 text-gray-400'
-            initial={{ opacity: 0, x: xOffset }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            {subtitle}
-          </motion.p>
-
-          {/* Basic description */}
-          {Array.isArray(description) ? (
-            description.map((item, index) => (
-              <motion.p
-                key={index}
-                className='mt-4 text-gray-300'
-                initial={{ opacity: 0, x: xOffset }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
+            {/* Add click indicator */}
+            <div
+              className={`
+                absolute top-4 right-6
+                ${isLeft && 'md:right-auto md:left-6'}
+                text-blue-400/70 group-hover:text-blue-400 transition-colors duration-300
+                flex items-center gap-2
+                ${
+                  isExpanded ? 'rotate-180' : 'rotate-0'
+                } transition-transform duration-300
+              `}
+            >
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                width='20'
+                height='20'
+                viewBox='0 0 24 24'
+                fill='none'
+                stroke='currentColor'
+                strokeWidth='2'
+                strokeLinecap='round'
+                strokeLinejoin='round'
               >
-                {item}
-              </motion.p>
-            ))
-          ) : (
-            <motion.p
-              className='mt-4 text-gray-300'
-              initial={{ opacity: 0, x: xOffset }}
+                <path d='m6 9 6 6 6-6' />
+              </svg>
+            </div>
+
+            <motion.h3
+              className='text-2xl font-bold text-white group-hover:text-blue-300 transition-colors duration-300'
+              initial={{ opacity: 0, x: getInitialTextX() }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.6 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
             >
-              {description}
+              {title}
+            </motion.h3>
+            <motion.p
+              className='mt-2 text-gray-400'
+              initial={{ opacity: 0, x: getInitialTextX() }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+            >
+              {subtitle}
             </motion.p>
-          )}
 
-          {/* Expanded details */}
-          {details && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{
-                height: isExpanded ? 'auto' : 0,
-                opacity: isExpanded ? 1 : 0,
-              }}
-              transition={{ duration: 0.3 }}
-              className='overflow-hidden'
-            >
-              {details.technologies && (
-                <div className='mt-6'>
-                  <h4 className='text-blue-300 font-semibold mb-2'>
-                    Technologies
-                  </h4>
-                  <div className='flex flex-wrap gap-2'>
-                    {details.technologies.map((tech, index) => (
-                      <span
-                        key={index}
-                        className='px-3 py-1 bg-blue-500/20 rounded-full text-sm text-blue-200'
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
+            {/* Basic description */}
+            {Array.isArray(description) ? (
+              description.map((item, index) => (
+                <motion.p
+                  key={index}
+                  className='mt-4 text-gray-300 group-hover:text-gray-200 transition-colors duration-300'
+                  initial={{ opacity: 0, x: getInitialTextX() }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
+                >
+                  {item}
+                </motion.p>
+              ))
+            ) : (
+              <motion.p
+                className='mt-4 text-gray-300 group-hover:text-gray-200 transition-colors duration-300'
+                initial={{ opacity: 0, x: getInitialTextX() }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.6 }}
+              >
+                {description}
+              </motion.p>
+            )}
 
-              {details.achievements && (
-                <div className='mt-4'>
-                  <h4 className='text-blue-300 font-semibold mb-2'>
-                    Key Achievements
-                  </h4>
-                  <ul className='list-disc list-inside text-gray-300'>
-                    {details.achievements.map((achievement, index) => (
-                      <li key={index} className='mt-2'>
-                        {achievement}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {details.links && (
-                <div className='mt-4'>
-                  <div className='flex flex-wrap gap-3'>
-                    {details.links.map((link, index) => (
-                      <a
-                        key={index}
-                        href={link.url}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='inline-flex items-center px-4 py-2 bg-blue-500/30 hover:bg-blue-500/40 rounded-lg text-blue-200 transition-colors duration-300'
-                      >
-                        {link.text}
-                        <svg
-                          className='w-4 h-4 ml-2'
-                          fill='none'
-                          stroke='currentColor'
-                          viewBox='0 0 24 24'
+            {/* Expanded details */}
+            {details && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{
+                  height: isExpanded ? 'auto' : 0,
+                  opacity: isExpanded ? 1 : 0,
+                }}
+                transition={{ duration: 0.3 }}
+                className='overflow-hidden'
+              >
+                {details.technologies && (
+                  <div className='mt-6'>
+                    <h4 className='text-blue-300 font-semibold mb-2'>
+                      Technologies
+                    </h4>
+                    <div className='flex flex-wrap gap-2'>
+                      {details.technologies.map((tech, index) => (
+                        <span
+                          key={index}
+                          className='px-3 py-1 bg-blue-500/20 rounded-full text-sm text-blue-200'
                         >
-                          <path
-                            strokeLinecap='round'
-                            strokeLinejoin='round'
-                            strokeWidth={2}
-                            d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'
-                          />
-                        </svg>
-                      </a>
-                    ))}
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              )}
-            </motion.div>
-          )}
-        </div>
-      </motion.div>
+                )}
+
+                {details.achievements && (
+                  <div className='mt-4'>
+                    <h4 className='text-blue-300 font-semibold mb-2'>
+                      Key Achievements
+                    </h4>
+                    <ul className='list-disc list-inside text-gray-300'>
+                      {details.achievements.map((achievement, index) => (
+                        <li key={index} className='mt-2'>
+                          {achievement}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {details.links && (
+                  <div className='mt-4'>
+                    <div className='flex flex-wrap gap-3'>
+                      {details.links.map((link, index) => (
+                        <a
+                          key={index}
+                          href={link.url}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='inline-flex items-center px-4 py-2 bg-blue-500/30 hover:bg-blue-500/40 rounded-lg text-blue-200 transition-colors duration-300'
+                        >
+                          {link.text}
+                          <svg
+                            className='w-4 h-4 ml-2'
+                            fill='none'
+                            stroke='currentColor'
+                            viewBox='0 0 24 24'
+                          >
+                            <path
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              strokeWidth={2}
+                              d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'
+                            />
+                          </svg>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            )}
+          </div>
+        </motion.div>
+      </div>
     </div>
   );
 };
@@ -352,17 +410,17 @@ const JDBuildsPortfolio = () => {
       <HeroSection />
 
       {/* Timeline Container */}
-      <div className='relative pb-36 sm:pb-56' ref={containerRef}>
+      <div className='relative pb-56' ref={containerRef}>
         {/* Timeline line */}
         <motion.div
-          className='absolute left-[20px] md:left-1/2 h-full w-0.5 bg-blue-500 origin-top'
+          className='absolute left-[31px] md:left-1/2 h-full w-0.5 bg-blue-500 origin-top md:-translate-x-1/2'
           style={{
             scaleY: scrollYProgress,
           }}
         />
 
         {/* Timeline Items */}
-        <div className='relative z-10 mx-auto max-w-7xl flex flex-col gap-32 py-32'>
+        <div className='relative z-10 mx-auto max-w-7xl flex flex-col gap-16 md:gap-32 py-16 md:py-32'>
           <TimelineItem
             title='JD Builds'
             subtitle='Software Developer • November 2023 - Present'
