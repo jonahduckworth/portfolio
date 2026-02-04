@@ -41,6 +41,12 @@ function Nav() {
           work
         </a>
         <a
+          href="#ventures"
+          className="text-sm text-muted hover:text-foreground transition-colors duration-200"
+        >
+          ventures
+        </a>
+        <a
           href="#speaking"
           className="text-sm text-muted hover:text-foreground transition-colors duration-200"
         >
@@ -109,11 +115,24 @@ function Hero() {
           custom={0.45}
         >
           Developer and entrepreneur. Founded{' '}
-          <a href="https://refbuddy.ca" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-accent transition-colors duration-200 underline decoration-white/20 underline-offset-4 hover:decoration-accent/50">
+          <a
+            href="https://refbuddy.ca"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-foreground hover:text-accent transition-colors duration-200 underline decoration-white/20 underline-offset-4 hover:decoration-accent/50"
+          >
             Ref Buddy
+          </a>{' '}
+          and{' '}
+          <a
+            href="https://harvestingpro.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-foreground hover:text-accent transition-colors duration-200 underline decoration-white/20 underline-offset-4 hover:decoration-accent/50"
+          >
+            HarvestingPro
           </a>
-          . Run{' '}
-          <span className="text-foreground">JD Builds</span> — consulting for startups that need to ship.
+          . I turn manual processes into software that scales.
         </motion.p>
 
         <motion.div
@@ -128,12 +147,22 @@ function Hero() {
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-foreground text-background text-sm font-medium rounded-full hover:bg-accent hover:text-white transition-all duration-200"
           >
             See my work
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="m6 17 5-5-5-5" /><path d="m13 17 5-5-5-5" />
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="m6 17 5-5-5-5" />
+              <path d="m13 17 5-5-5-5" />
             </svg>
           </a>
           <a
-            href="mailto:jonahduckworth@gmail.com"
+            href="mailto:jonah@jdbuilds.ca"
             className="inline-flex items-center px-5 py-2.5 border border-white/10 text-sm text-muted hover:text-foreground hover:border-white/25 rounded-full transition-all duration-200"
           >
             Get in touch
@@ -180,23 +209,25 @@ function SectionHeader({ label, title }: { label: string; title: string }) {
   );
 }
 
-// ——— Project card ———
+// ——— Venture card (founded companies) ———
 
-interface Project {
+interface Venture {
   name: string;
   role: string;
   period: string;
+  location: string;
   description: string;
+  highlights: string[];
   tech: string[];
   link?: string;
   featured?: boolean;
 }
 
-function ProjectCard({ project, index }: { project: Project; index: number }) {
+function VentureCard({ venture, index }: { venture: Venture; index: number }) {
   const inner = (
     <motion.div
       className={`group relative p-6 md:p-8 rounded-2xl border transition-all duration-300 ${
-        project.featured
+        venture.featured
           ? 'border-accent/20 bg-accent/[0.02] hover:border-accent/40 hover:bg-accent/[0.04]'
           : 'border-white/[0.06] bg-white/[0.01] hover:border-white/[0.12] hover:bg-white/[0.03]'
       }`}
@@ -206,7 +237,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       viewport={{ once: true, margin: '-60px' }}
       custom={index * 0.1}
     >
-      {project.featured && (
+      {venture.featured && (
         <div className="absolute top-4 right-4 md:top-6 md:right-6">
           <span className="text-[10px] font-mono text-accent uppercase tracking-widest px-2.5 py-1 border border-accent/20 rounded-full">
             Featured
@@ -217,10 +248,14 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       <div className="flex flex-col gap-4">
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <h3 className={`text-xl md:text-2xl font-semibold tracking-tight ${project.featured ? 'text-accent' : 'text-foreground'}`}>
-              {project.name}
+            <h3
+              className={`text-xl md:text-2xl font-semibold tracking-tight ${
+                venture.featured ? 'text-accent' : 'text-foreground'
+              }`}
+            >
+              {venture.name}
             </h3>
-            {project.link && (
+            {venture.link && (
               <svg
                 className="w-4 h-4 text-muted group-hover:text-foreground transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                 viewBox="0 0 24 24"
@@ -236,16 +271,25 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             )}
           </div>
           <p className="text-sm text-muted font-mono">
-            {project.role} · {project.period}
+            {venture.role} · {venture.period} · {venture.location}
           </p>
         </div>
 
         <p className="text-[15px] text-muted leading-relaxed">
-          {project.description}
+          {venture.description}
         </p>
 
+        <ul className="space-y-2">
+          {venture.highlights.map((h, i) => (
+            <li key={i} className="flex items-start gap-2.5 text-sm text-muted/70 leading-relaxed">
+              <span className="text-accent/60 mt-1.5 flex-shrink-0">›</span>
+              {h}
+            </li>
+          ))}
+        </ul>
+
         <div className="flex flex-wrap gap-2 mt-auto pt-2">
-          {project.tech.map((t) => (
+          {venture.tech.map((t) => (
             <span
               key={t}
               className="text-xs font-mono text-muted/70 px-2.5 py-1 rounded-md bg-white/[0.03] border border-white/[0.04]"
@@ -258,9 +302,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     </motion.div>
   );
 
-  if (project.link) {
+  if (venture.link) {
     return (
-      <a href={project.link} target="_blank" rel="noopener noreferrer" className="block">
+      <a href={venture.link} target="_blank" rel="noopener noreferrer" className="block">
         {inner}
       </a>
     );
@@ -268,42 +312,185 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   return inner;
 }
 
-// ——— Projects section ———
-
-const projects: Project[] = [
+const ventures: Venture[] = [
   {
     name: 'Ref Buddy',
-    role: 'Founder',
+    role: 'Founder & Technical Lead',
     period: '2022 – present',
+    location: 'Calgary',
     description:
-      'Built an officiating platform solo from concept to market. 200+ active users, multiple league partnerships. Brought on a CTO, senior dev, and board member as it grew.',
-    tech: ['Flutter', 'Go', 'Next.js', 'Postgres', 'Firebase', 'Digital Ocean'],
+      'Built a sports officiating platform from scratch to fix scheduling problems I dealt with as a hockey ref. Replaced spreadsheets and email chains with real-time scheduling, expense tracking, and game reports.',
+    highlights: [
+      'Single-handedly built the entire platform — now used by multiple hockey leagues across Western Canada',
+      'Smart scheduling algorithms that cut administrative overhead for league coordinators',
+      'Expense system replaced a weekly Excel-and-email process — submission time went from minutes to seconds',
+      'Game and video reports auto-populate details, cutting report completion time by 80%+',
+    ],
+    tech: ['Flutter', 'Next.js', 'Go', 'GraphQL', 'DigitalOcean', 'GCP'],
     link: 'https://refbuddy.ca',
     featured: true,
   },
   {
-    name: 'JD Builds',
-    role: 'Founder',
-    period: '2023 – present',
+    name: 'HarvestingPro',
+    role: 'Co-Founder & Technical Lead',
+    period: '2024 – present',
+    location: 'Calgary',
     description:
-      'Software consulting for startups that need to move fast. Full-stack builds from first commit to production.',
-    tech: ['React', 'Next.js', 'Go', 'Rust', 'Node', 'Docker', 'GCP'],
+      'Partnered with forestry operators to replace their fragmented spreadsheet workflows with a unified platform for tracking equipment, employees, and project profitability.',
+    highlights: [
+      'Delivered functional MVP in 4 months — met the client\'s operational deadlines',
+      'Real-time project tracking and expense dashboards so operators spot unprofitable work early',
+      'Recruited a dev to build a React Native time-card app for field crews',
+    ],
+    tech: ['Next.js', 'Rust', 'React Native', 'Postgres'],
+    link: 'https://harvestingpro.com',
+  },
+];
+
+function Ventures() {
+  return (
+    <section
+      id="ventures"
+      className="px-6 md:px-12 lg:px-24 py-24 md:py-32 border-t border-white/[0.04]"
+    >
+      <SectionHeader label="Ventures" title="Companies I founded" />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+        {ventures.map((venture, i) => (
+          <VentureCard key={venture.name} venture={venture} index={i} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ——— Work card (consulting / employment) ———
+
+interface WorkItem {
+  company: string;
+  role: string;
+  period: string;
+  location: string;
+  description: string;
+  highlights: string[];
+  tech: string[];
+  link?: string;
+}
+
+function WorkCard({ item, index }: { item: WorkItem; index: number }) {
+  const inner = (
+    <motion.div
+      className="group relative p-6 md:p-8 rounded-2xl border border-white/[0.06] bg-white/[0.01] hover:border-white/[0.12] hover:bg-white/[0.03] transition-all duration-300"
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-60px' }}
+      custom={index * 0.1}
+    >
+      <div className="flex flex-col gap-4">
+        <div>
+          <div className="flex items-center gap-3 mb-1">
+            <h3 className="text-xl md:text-2xl font-semibold tracking-tight text-foreground">
+              {item.company}
+            </h3>
+            {item.link && (
+              <svg
+                className="w-4 h-4 text-muted group-hover:text-foreground transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M7 17 17 7" />
+                <path d="M7 7h10v10" />
+              </svg>
+            )}
+          </div>
+          <p className="text-sm text-muted font-mono">
+            {item.role} · {item.period} · {item.location}
+          </p>
+        </div>
+
+        <p className="text-[15px] text-muted leading-relaxed">
+          {item.description}
+        </p>
+
+        <ul className="space-y-2">
+          {item.highlights.map((h, i) => (
+            <li key={i} className="flex items-start gap-2.5 text-sm text-muted/70 leading-relaxed">
+              <span className="text-white/20 mt-1.5 flex-shrink-0">›</span>
+              {h}
+            </li>
+          ))}
+        </ul>
+
+        <div className="flex flex-wrap gap-2 mt-auto pt-2">
+          {item.tech.map((t) => (
+            <span
+              key={t}
+              className="text-xs font-mono text-muted/70 px-2.5 py-1 rounded-md bg-white/[0.03] border border-white/[0.04]"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
+    </motion.div>
+  );
+
+  if (item.link) {
+    return (
+      <a href={item.link} target="_blank" rel="noopener noreferrer" className="block">
+        {inner}
+      </a>
+    );
+  }
+  return inner;
+}
+
+const workItems: WorkItem[] = [
+  {
+    company: 'Solea Energy',
+    role: 'Software Developer Consultant',
+    period: '2025',
+    location: 'Kansas City (remote)',
+    description:
+      'Brought on to turn manual Python scripts and spreadsheets into a real trading platform for financial transmission rights traders.',
+    highlights: [
+      'Built a distributed Rust backend with dedicated executor APIs on individual VMs — traders run models in parallel without blocking each other',
+      'Three-tier data layer: Snowflake for heavy computation, MongoDB for workflows, Redis for real-time log streaming',
+      'Live model execution with log streaming from executor APIs to the frontend — traders build, queue, and monitor without leaving the browser',
+    ],
+    tech: ['Rust', 'Snowflake', 'MongoDB', 'Redis', 'Next.js'],
+    link: 'https://soleaenergy.com',
   },
   {
-    name: 'MoneyUp',
-    role: 'Developer',
+    company: 'MoneyUp',
+    role: 'Software Developer Consultant',
     period: '2023 – 2024',
+    location: 'Edmonton (remote)',
     description:
-      'Fintech startup. Built cross-platform mobile and web app with a small team. Solved critical architecture problems early.',
-    tech: ['Flutter', 'Next.js', 'Python', 'Azure', 'Postgres'],
+      'Joined during alpha. Helped scale the fintech platform from early adopters to thousands of active users.',
+    highlights: [
+      'Designed a daily accrual system with smart rounding that made loan terms actually understandable — support tickets dropped',
+      'Built subscription payment flows that established recurring revenue beyond transaction fees',
+      'Redis caching and query optimization for measurably faster load times at scale',
+    ],
+    tech: ['Flutter', 'Next.js', 'Python', 'Azure', 'Postgres', 'Redis'],
     link: 'https://moneyup.ca',
   },
   {
-    name: 'Logit Analytics',
-    role: 'Developer',
+    company: 'LogIt Analytics',
+    role: 'Software Developer',
     period: '2022',
+    location: 'Kamloops (remote)',
     description:
-      'Forestry tech. Built real-time fire restriction system for loggers. First mobile app the company ever shipped.',
+      'Early hire at a forestry tech company. Built safety and compliance features and shipped their first mobile app.',
+    highlights: [
+      'Real-time fire restriction monitoring system — loggers get immediate visibility into compliance requirements',
+      'Built the company\'s first Flutter mobile app, bringing the platform to field workers',
+    ],
     tech: ['Flutter', 'React', 'Python', 'Firebase', 'GCP'],
     link: 'https://logitnow.ca',
   },
@@ -312,10 +499,10 @@ const projects: Project[] = [
 function Work() {
   return (
     <section id="work" className="px-6 md:px-12 lg:px-24 py-24 md:py-32">
-      <SectionHeader label="Work" title="Things I've built" />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-        {projects.map((project, i) => (
-          <ProjectCard key={project.name} project={project} index={i} />
+      <SectionHeader label="Work" title="Consulting & roles" />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+        {workItems.map((item, i) => (
+          <WorkCard key={item.company} item={item} index={i} />
         ))}
       </div>
     </section>
@@ -325,29 +512,48 @@ function Work() {
 // ——— Tech strip ———
 
 function TechStrip() {
-  const tools = [
-    'Flutter', 'React', 'Next.js', 'Go', 'Rust', 'Python', 'Node',
-    'Postgres', 'Firebase', 'Docker', 'GCP', 'Azure', 'Digital Ocean',
+  const categories = [
+    {
+      label: 'Frontend',
+      tools: ['React', 'Next.js', 'TypeScript', 'Tailwind', 'Flutter', 'React Native'],
+    },
+    {
+      label: 'Backend',
+      tools: ['Rust', 'Go', 'Python', 'Node.js', 'Postgres', 'Redis', 'Snowflake', 'Firebase'],
+    },
+    {
+      label: 'Infra',
+      tools: ['GCP', 'Azure', 'DigitalOcean', 'Hetzner', 'Docker', 'Dokploy'],
+    },
   ];
 
   return (
     <section className="px-6 md:px-12 lg:px-24 py-16 border-t border-white/[0.04]">
       <motion.div
-        className="flex flex-wrap gap-3 justify-center"
+        className="space-y-6"
         variants={stagger}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: '-40px' }}
       >
-        {tools.map((tool, i) => (
-          <motion.span
-            key={tool}
-            className="text-xs font-mono text-muted/50 px-3 py-1.5 rounded-full border border-white/[0.04] hover:border-white/[0.12] hover:text-muted transition-all duration-200"
-            variants={fadeUp}
-            custom={i * 0.03}
-          >
-            {tool}
-          </motion.span>
+        {categories.map((cat) => (
+          <div key={cat.label} className="flex flex-col sm:flex-row sm:items-center gap-3">
+            <span className="text-xs font-mono text-muted/40 uppercase tracking-widest w-20 flex-shrink-0">
+              {cat.label}
+            </span>
+            <div className="flex flex-wrap gap-2">
+              {cat.tools.map((tool, i) => (
+                <motion.span
+                  key={tool}
+                  className="text-xs font-mono text-muted/50 px-3 py-1.5 rounded-full border border-white/[0.04] hover:border-white/[0.12] hover:text-muted transition-all duration-200"
+                  variants={fadeUp}
+                  custom={i * 0.03}
+                >
+                  {tool}
+                </motion.span>
+              ))}
+            </div>
+          </div>
         ))}
       </motion.div>
     </section>
@@ -369,14 +575,15 @@ const speakingItems: SpeakingItem[] = [
     title: 'Velocity Showcase — Emcee',
     context: 'Alberta Catalyzer',
     year: '2024',
-    description: 'Hosted the showcase live on stage, 200+ attendees.',
+    description: 'Hosted the showcase live on stage. Founders pitched to a live audience of peers and community members.',
     link: 'https://albertacatalyzer.com/velocity',
   },
   {
     title: 'Telling It Like It Is',
     context: 'Podcast w/ Jade Alberts',
     year: '2024',
-    description: 'Talked bootstrapping, the real ups and downs of building a company from nothing.',
+    description:
+      'Talked with Calgary angel investor Jade Alberts about the real highs and lows of bootstrapping a startup.',
     link: 'https://www.youtube.com/live/3199SHJxb8U?si=wxqlNTEjbWT0txjN',
   },
   {
@@ -387,17 +594,21 @@ const speakingItems: SpeakingItem[] = [
     link: 'https://www.mtroyal.ca/ProgramsCourses/FacultiesSchoolsCentres/Business/Institutes/InstituteInnovationEntrepreneurship/Tech-Liftoff-Business.htm',
   },
   {
-    title: 'Velocity Showcase — Pitch',
+    title: 'Velocity — Pitch',
     context: 'Alberta Catalyzer',
     year: '2023',
-    description: 'Pitched Ref Buddy to 200+ people after completing the pre-accelerator.',
+    description:
+      'Pitched Ref Buddy live to 200+ people after completing the eight-week pre-accelerator program.',
     link: 'https://albertacatalyzer.com/velocity',
   },
 ];
 
 function Speaking() {
   return (
-    <section id="speaking" className="px-6 md:px-12 lg:px-24 py-24 md:py-32 border-t border-white/[0.04]">
+    <section
+      id="speaking"
+      className="px-6 md:px-12 lg:px-24 py-24 md:py-32 border-t border-white/[0.04]"
+    >
       <SectionHeader label="Speaking" title="Talks & appearances" />
       <div className="space-y-1">
         {speakingItems.map((item, i) => (
@@ -464,7 +675,7 @@ function Education() {
           <h3 className="text-lg font-medium">BSc Computing Science</h3>
         </div>
         <div className="text-sm text-muted font-mono">
-          Thompson Rivers University · 2022
+          Thompson Rivers University · Kamloops · 2022
         </div>
       </motion.div>
     </section>
@@ -476,12 +687,15 @@ function Education() {
 function Footer() {
   const links = [
     { label: 'GitHub', href: 'https://github.com/jonahduckworth' },
-    { label: 'LinkedIn', href: 'https://ca.linkedin.com/in/jonah-duckworth' },
-    { label: 'Email', href: 'mailto:jonahduckworth@gmail.com' },
+    { label: 'LinkedIn', href: 'https://linkedin.com/in/jonah-duckworth' },
+    { label: 'Email', href: 'mailto:jonah@jdbuilds.ca' },
   ];
 
   return (
-    <footer id="contact" className="px-6 md:px-12 lg:px-24 py-16 md:py-24 border-t border-white/[0.04]">
+    <footer
+      id="contact"
+      className="px-6 md:px-12 lg:px-24 py-16 md:py-24 border-t border-white/[0.04]"
+    >
       <motion.div
         className="flex flex-col md:flex-row md:items-end md:justify-between gap-8"
         variants={fadeUp}
@@ -498,7 +712,8 @@ function Footer() {
             Let&apos;s build something.
           </h2>
           <p className="text-muted text-sm max-w-md">
-            Open to interesting projects. If you&apos;re a startup that needs to ship, reach out.
+            Open to interesting projects. If you&apos;re a startup that needs to
+            ship, reach out.
           </p>
         </div>
 
@@ -538,6 +753,7 @@ export default function Page() {
     <main className="relative">
       <Nav />
       <Hero />
+      <Ventures />
       <Work />
       <TechStrip />
       <Speaking />
