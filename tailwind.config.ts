@@ -9,42 +9,16 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: 'var(--background)',
-        foreground: 'var(--foreground)',
+        background: '#050505',
+        foreground: '#e5e5e5',
+        accent: '#f97316',
+        muted: '#737373',
+        border: '#1a1a1a',
+        card: '#0a0a0a',
       },
-      animation: {
-        marquee: 'marquee var(--duration) linear infinite',
-        'marquee-vertical': 'marquee-vertical var(--duration) linear infinite',
-        'gradient-x': 'gradient-x 15s ease infinite',
-        glow: 'glow 2s ease-in-out infinite alternate',
-      },
-      keyframes: {
-        marquee: {
-          from: { transform: 'translateX(0)' },
-          to: { transform: 'translateX(calc(-100% - var(--gap)))' },
-        },
-        'marquee-vertical': {
-          from: { transform: 'translateY(0)' },
-          to: { transform: 'translateY(calc(-100% - var(--gap)))' },
-        },
-        'gradient-x': {
-          '0%': {
-            'background-size': '400% 400%',
-            'background-position': '0% 50%',
-          },
-          '50%': {
-            'background-size': '400% 400%',
-            'background-position': '100% 50%',
-          },
-          '100%': {
-            'background-size': '400% 400%',
-            'background-position': '0% 50%',
-          },
-        },
-        glow: {
-          '0%': { opacity: '0.4' },
-          '100%': { opacity: '0.8' },
-        },
+      fontFamily: {
+        sans: ['var(--font-geist-sans)'],
+        mono: ['var(--font-geist-mono)'],
       },
     },
   },

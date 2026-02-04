@@ -1,637 +1,548 @@
 'use client';
 
-import React from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import Marquee from '@/components/Marquee';
-import AnimatedBackground from './components/AnimatedBackground';
+import { useRef } from 'react';
 
-const CircleIndicator = () => (
-  <div className='absolute flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 -translate-x-1/2 -translate-y-1/2'>
-    <div className='h-4 w-4 rounded-full bg-white' />
-  </div>
-);
+// ——— Shared animation variants ———
 
-const TimelineItem = ({
-  title,
-  subtitle,
-  description,
-  isLeft,
-  details,
-}: {
-  title: string;
-  subtitle: string;
-  description: string | string[];
-  isLeft: boolean;
-  details?: {
-    technologies?: string[];
-    achievements?: string[];
-    links?: { text: string; url: string }[];
-  };
-}) => {
-  const [isExpanded, setIsExpanded] = React.useState(false);
-  const [isMobile, setIsMobile] = React.useState(false);
-
-  React.useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  const getInitialX = () => {
-    if (isMobile) return 20;
-    return isLeft ? -20 : 20;
-  };
-
-  const getInitialTextX = () => {
-    if (isMobile) return 50;
-    return isLeft ? -50 : 50;
-  };
-
-  return (
-    <div className='relative flex w-full items-center justify-center'>
-      <motion.div
-        className='absolute top-1/2 left-[31px] md:left-1/2 -translate-y-1/2 md:-translate-x-1/2'
-        initial={{ opacity: 0, x: getInitialX() }}
-        whileInView={{
-          opacity: 1,
-          x: 0,
-        }}
-        transition={{ duration: 0.5 }}
-      >
-        <CircleIndicator />
-      </motion.div>
-
-      <div className={`w-full grid grid-cols-1 md:grid-cols-[1fr,1fr] gap-4`}>
-        <motion.div
-          className={`
-            cursor-pointer
-            ${isLeft ? 'md:col-start-1' : 'md:col-start-2'}
-            pl-14 pr-6 md:pl-0 md:pr-0
-            ${!isLeft && 'col-span-1'}
-            ${isLeft ? 'md:mr-16' : 'md:ml-16'}
-          `}
-          onClick={() => setIsExpanded(!isExpanded)}
-          whileHover={{ scale: 1.02 }}
-          transition={{ duration: 0.2 }}
-        >
-          <div
-            className={`
-              rounded-xl bg-blue-500/5 hover:bg-blue-500/10 p-6 transition-all duration-300
-              group relative w-full
-              border border-blue-500/20 hover:border-blue-500/40
-              text-left md:text-left
-              ${
-                isLeft
-                  ? 'md:text-right md:rounded-l-[32px]'
-                  : 'md:rounded-r-[32px]'
-              }
-            `}
-          >
-            {/* Add click indicator */}
-            <div
-              className={`
-                absolute top-4 right-6
-                ${isLeft && 'md:right-auto md:left-6'}
-                text-blue-400/70 group-hover:text-blue-400 transition-colors duration-300
-                flex items-center gap-2
-                ${
-                  isExpanded ? 'rotate-180' : 'rotate-0'
-                } transition-transform duration-300
-              `}
-            >
-              <svg
-                xmlns='http://www.w3.org/2000/svg'
-                width='20'
-                height='20'
-                viewBox='0 0 24 24'
-                fill='none'
-                stroke='currentColor'
-                strokeWidth='2'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-              >
-                <path d='m6 9 6 6 6-6' />
-              </svg>
-            </div>
-
-            <motion.h3
-              className='text-2xl font-bold text-white group-hover:text-blue-300 transition-colors duration-300'
-              initial={{ opacity: 0, x: getInitialTextX() }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              {title}
-            </motion.h3>
-            <motion.p
-              className='mt-2 text-gray-400'
-              initial={{ opacity: 0, x: getInitialTextX() }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
-            >
-              {subtitle}
-            </motion.p>
-
-            {/* Basic description */}
-            {Array.isArray(description) ? (
-              description.map((item, index) => (
-                <motion.p
-                  key={index}
-                  className='mt-4 text-gray-300 group-hover:text-gray-200 transition-colors duration-300'
-                  initial={{ opacity: 0, x: getInitialTextX() }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
-                >
-                  {item}
-                </motion.p>
-              ))
-            ) : (
-              <motion.p
-                className='mt-4 text-gray-300 group-hover:text-gray-200 transition-colors duration-300'
-                initial={{ opacity: 0, x: getInitialTextX() }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: 0.6 }}
-              >
-                {description}
-              </motion.p>
-            )}
-
-            {/* Expanded details */}
-            {details && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{
-                  height: isExpanded ? 'auto' : 0,
-                  opacity: isExpanded ? 1 : 0,
-                }}
-                transition={{ duration: 0.3 }}
-                className='overflow-hidden'
-              >
-                {details.technologies && (
-                  <div className='mt-6'>
-                    <h4 className='text-blue-300 font-semibold mb-2'>
-                      Technologies
-                    </h4>
-                    <div className='flex flex-wrap gap-2'>
-                      {details.technologies.map((tech, index) => (
-                        <span
-                          key={index}
-                          className='px-3 py-1 bg-blue-500/20 rounded-full text-sm text-blue-200'
-                        >
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {details.achievements && (
-                  <div className='mt-4'>
-                    <h4 className='text-blue-300 font-semibold mb-2'>
-                      Key Achievements
-                    </h4>
-                    <ul className='list-disc list-inside text-gray-300'>
-                      {details.achievements.map((achievement, index) => (
-                        <li key={index} className='mt-2'>
-                          {achievement}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {details.links && (
-                  <div className='mt-4'>
-                    <div className='flex flex-wrap gap-3'>
-                      {details.links.map((link, index) => (
-                        <a
-                          key={index}
-                          href={link.url}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          className='inline-flex items-center px-4 py-2 bg-blue-500/30 hover:bg-blue-500/40 rounded-lg text-blue-200 transition-colors duration-300'
-                        >
-                          {link.text}
-                          <svg
-                            className='w-4 h-4 ml-2'
-                            fill='none'
-                            stroke='currentColor'
-                            viewBox='0 0 24 24'
-                          >
-                            <path
-                              strokeLinecap='round'
-                              strokeLinejoin='round'
-                              strokeWidth={2}
-                              d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'
-                            />
-                          </svg>
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-            )}
-          </div>
-        </motion.div>
-      </div>
-    </div>
-  );
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  visible: (delay: number = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, delay, ease: [0.25, 0.4, 0.25, 1] },
+  }),
 };
 
-const HeroSection = () => {
-  const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+const stagger = {
+  visible: {
+    transition: { staggerChildren: 0.08 },
+  },
+};
 
-  const frontEndSkills = ['Flutter', 'NextJS', 'React', 'Gatsby', 'Vue'];
-  const backEndSkills = [
-    'Rust',
-    'NodeJS',
-    'Go',
-    'Python',
-    'Firebase',
-    'MySQL',
-    'Postgres',
-    'GCP',
-    'Azure',
-  ];
+// ——— Nav ———
+
+function Nav() {
+  return (
+    <motion.nav
+      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 bg-background/80 backdrop-blur-md border-b border-white/[0.04]"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.1 }}
+    >
+      <a href="#" className="text-sm font-medium tracking-tight text-foreground">
+        jonah duckworth
+      </a>
+      <div className="flex items-center gap-6">
+        <a
+          href="#work"
+          className="text-sm text-muted hover:text-foreground transition-colors duration-200"
+        >
+          work
+        </a>
+        <a
+          href="#speaking"
+          className="text-sm text-muted hover:text-foreground transition-colors duration-200"
+        >
+          speaking
+        </a>
+        <a
+          href="#contact"
+          className="text-sm text-muted hover:text-foreground transition-colors duration-200"
+        >
+          contact
+        </a>
+      </div>
+    </motion.nav>
+  );
+}
+
+// ——— Hero ———
+
+function Hero() {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start'],
+  });
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const y = useTransform(scrollYProgress, [0, 0.5], [0, -60]);
 
   return (
-    <motion.div
-      style={{ opacity }}
-      className='relative min-h-screen flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8'
+    <motion.section
+      ref={ref}
+      className="relative min-h-[100svh] flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-20"
+      style={{ opacity, y }}
     >
-      <AnimatedBackground />
+      {/* Subtle gradient orb */}
+      <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
 
-      <div className='relative z-10 text-center max-w-7xl mx-auto'>
-        <motion.h1
-          className='text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-400'
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 1.2,
-            delay: 0.3,
-            type: 'spring',
-            bounce: 0.4,
-          }}
+      <div className="max-w-3xl">
+        <motion.div
+          className="flex items-center gap-3 mb-8"
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          custom={0.2}
         >
-          <div className='relative text-6xl font-bold mb-8'>
-            <span className='relative inline-block'>
-              <span className='animate-gradient-x bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-blue-100 to-blue-600'>
-                JD
-              </span>
-              <div className='absolute inset-0 blur-[20px] animate-glow bg-blue-400/20' />
-            </span>
-            <span className='relative inline-block ml-4'>
-              <span className='animate-gradient-x bg-clip-text text-transparent bg-gradient-to-r from-blue-100 via-blue-600 to-blue-100'>
-                Builds
-              </span>
-              <div className='absolute inset-0 blur-[20px] animate-glow bg-blue-400/20' />
-            </span>
-          </div>
+          <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+          <span className="text-sm font-mono text-muted">Calgary, AB</span>
+        </motion.div>
+
+        <motion.h1
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.08] mb-6"
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          custom={0.3}
+        >
+          I build software
+          <br />
+          <span className="text-accent">from zero to real.</span>
         </motion.h1>
 
-        <motion.div
-          className='text-sm sm:text-base md:text-lg text-gray-300 mb-16 max-w-2xl mx-auto space-y-1.5 sm:space-y-2 px-2 sm:px-3'
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 1.2,
-            delay: 0.6,
-            type: 'spring',
-            bounce: 0.3,
-          }}
+        <motion.p
+          className="text-lg md:text-xl text-muted max-w-xl leading-relaxed mb-10"
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          custom={0.45}
         >
-          <p className='font-mono'>
-            <span className='text-blue-400'>const</span>{' '}
-            <span className='text-green-400'>expertise</span>{' '}
-            <span className='text-blue-400'>=</span>{' '}
-            <span className='text-orange-400'>
-              &apos;Full Stack Development&apos;
-            </span>
-          </p>
-          <p className='font-mono'>
-            <span className='text-blue-400'>const</span>{' '}
-            <span className='text-green-400'>focus</span>{' '}
-            <span className='text-blue-400'>=</span>{' '}
-            <span className='text-orange-400'>
-              &apos;Startup Solutions&apos;
-            </span>
-          </p>
-          <p className='font-mono text-blue-300 opacity-75'>
-            <span className='text-gray-500'>
-              {'// Bringing ideas to production'}
-            </span>
-          </p>
+          Developer and entrepreneur. Founded{' '}
+          <a href="https://refbuddy.ca" target="_blank" rel="noopener noreferrer" className="text-foreground hover:text-accent transition-colors duration-200 underline decoration-white/20 underline-offset-4 hover:decoration-accent/50">
+            Ref Buddy
+          </a>
+          . Run{' '}
+          <span className="text-foreground">JD Builds</span> — consulting for startups that need to ship.
+        </motion.p>
+
+        <motion.div
+          className="flex flex-wrap gap-3"
+          variants={fadeUp}
+          initial="hidden"
+          animate="visible"
+          custom={0.6}
+        >
+          <a
+            href="#work"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-foreground text-background text-sm font-medium rounded-full hover:bg-accent hover:text-white transition-all duration-200"
+          >
+            See my work
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m6 17 5-5-5-5" /><path d="m13 17 5-5-5-5" />
+            </svg>
+          </a>
+          <a
+            href="mailto:jonahduckworth@gmail.com"
+            className="inline-flex items-center px-5 py-2.5 border border-white/10 text-sm text-muted hover:text-foreground hover:border-white/25 rounded-full transition-all duration-200"
+          >
+            Get in touch
+          </a>
         </motion.div>
+      </div>
 
+      {/* Scroll indicator */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5 }}
+      >
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.9 }}
-          className='w-full sm:w-3/4 md:w-1/2 mx-auto relative mt-20'
-        >
-          {/* First Marquee Container */}
-          <motion.div
-            className='relative overflow-hidden px-1 my-4'
-            initial={{ x: 100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 1.2, delay: 1.2 }}
-          >
-            {/* Left gradient */}
-            <div className='absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
-            <div className='relative'>
-              <Marquee pauseOnHover speed={40} className='[--duration:15s]'>
-                {frontEndSkills.map((skill) => (
-                  <div
-                    key={skill}
-                    className='px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-full backdrop-blur-sm mx-2 transition-colors duration-300'
-                  >
-                    <span className='text-blue-300 hover:text-blue-200 whitespace-nowrap'>
-                      {skill}
-                    </span>
-                  </div>
-                ))}
-              </Marquee>
-            </div>
-            {/* Right gradient */}
-            <div className='absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
-          </motion.div>
+          className="w-[1px] h-8 bg-gradient-to-b from-transparent via-muted to-transparent"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+        />
+      </motion.div>
+    </motion.section>
+  );
+}
 
-          {/* Second Marquee Container */}
-          <motion.div
-            className='relative overflow-hidden px-1 my-4'
-            initial={{ x: -100, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 1.2, delay: 1.5 }}
-          >
-            {/* Left gradient */}
-            <div className='absolute left-0 top-0 h-full w-32 bg-gradient-to-r from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
-            <div className='relative'>
-              <Marquee
-                reverse
-                pauseOnHover
-                speed={30}
-                className='[--duration:25s]'
+// ——— Section header ———
+
+function SectionHeader({ label, title }: { label: string; title: string }) {
+  return (
+    <motion.div
+      className="mb-12 md:mb-16"
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-80px' }}
+      custom={0}
+    >
+      <span className="text-xs font-mono text-accent uppercase tracking-widest mb-3 block">
+        {label}
+      </span>
+      <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
+        {title}
+      </h2>
+    </motion.div>
+  );
+}
+
+// ——— Project card ———
+
+interface Project {
+  name: string;
+  role: string;
+  period: string;
+  description: string;
+  tech: string[];
+  link?: string;
+  featured?: boolean;
+}
+
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  const inner = (
+    <motion.div
+      className={`group relative p-6 md:p-8 rounded-2xl border transition-all duration-300 ${
+        project.featured
+          ? 'border-accent/20 bg-accent/[0.02] hover:border-accent/40 hover:bg-accent/[0.04]'
+          : 'border-white/[0.06] bg-white/[0.01] hover:border-white/[0.12] hover:bg-white/[0.03]'
+      }`}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: '-60px' }}
+      custom={index * 0.1}
+    >
+      {project.featured && (
+        <div className="absolute top-4 right-4 md:top-6 md:right-6">
+          <span className="text-[10px] font-mono text-accent uppercase tracking-widest px-2.5 py-1 border border-accent/20 rounded-full">
+            Featured
+          </span>
+        </div>
+      )}
+
+      <div className="flex flex-col gap-4">
+        <div>
+          <div className="flex items-center gap-3 mb-1">
+            <h3 className={`text-xl md:text-2xl font-semibold tracking-tight ${project.featured ? 'text-accent' : 'text-foreground'}`}>
+              {project.name}
+            </h3>
+            {project.link && (
+              <svg
+                className="w-4 h-4 text-muted group-hover:text-foreground transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                {backEndSkills.map((skill) => (
-                  <div
-                    key={skill}
-                    className='px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 rounded-full backdrop-blur-sm mx-2 transition-colors duration-300'
-                  >
-                    <span className='text-blue-300 hover:text-blue-200 whitespace-nowrap'>
-                      {skill}
-                    </span>
-                  </div>
-                ))}
-              </Marquee>
-            </div>
-            {/* Right gradient */}
-            <div className='absolute right-0 top-0 h-full w-32 bg-gradient-to-l from-[#000913] via-[#000913]/80 to-transparent z-10 pointer-events-none' />
-          </motion.div>
-        </motion.div>
+                <path d="M7 17 17 7" />
+                <path d="M7 7h10v10" />
+              </svg>
+            )}
+          </div>
+          <p className="text-sm text-muted font-mono">
+            {project.role} · {project.period}
+          </p>
+        </div>
+
+        <p className="text-[15px] text-muted leading-relaxed">
+          {project.description}
+        </p>
+
+        <div className="flex flex-wrap gap-2 mt-auto pt-2">
+          {project.tech.map((t) => (
+            <span
+              key={t}
+              className="text-xs font-mono text-muted/70 px-2.5 py-1 rounded-md bg-white/[0.03] border border-white/[0.04]"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
       </div>
     </motion.div>
   );
-};
 
-const JDBuildsPortfolio = () => {
-  const containerRef = React.useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start end', 'end center'],
-  });
+  if (project.link) {
+    return (
+      <a href={project.link} target="_blank" rel="noopener noreferrer" className="block">
+        {inner}
+      </a>
+    );
+  }
+  return inner;
+}
+
+// ——— Projects section ———
+
+const projects: Project[] = [
+  {
+    name: 'Ref Buddy',
+    role: 'Founder',
+    period: '2022 – present',
+    description:
+      'Built an officiating platform solo from concept to market. 200+ active users, multiple league partnerships. Brought on a CTO, senior dev, and board member as it grew.',
+    tech: ['Flutter', 'Go', 'Next.js', 'Postgres', 'Firebase', 'Digital Ocean'],
+    link: 'https://refbuddy.ca',
+    featured: true,
+  },
+  {
+    name: 'JD Builds',
+    role: 'Founder',
+    period: '2023 – present',
+    description:
+      'Software consulting for startups that need to move fast. Full-stack builds from first commit to production.',
+    tech: ['React', 'Next.js', 'Go', 'Rust', 'Node', 'Docker', 'GCP'],
+  },
+  {
+    name: 'MoneyUp',
+    role: 'Developer',
+    period: '2023 – 2024',
+    description:
+      'Fintech startup. Built cross-platform mobile and web app with a small team. Solved critical architecture problems early.',
+    tech: ['Flutter', 'Next.js', 'Python', 'Azure', 'Postgres'],
+    link: 'https://moneyup.ca',
+  },
+  {
+    name: 'Logit Analytics',
+    role: 'Developer',
+    period: '2022',
+    description:
+      'Forestry tech. Built real-time fire restriction system for loggers. First mobile app the company ever shipped.',
+    tech: ['Flutter', 'React', 'Python', 'Firebase', 'GCP'],
+    link: 'https://logitnow.ca',
+  },
+];
+
+function Work() {
+  return (
+    <section id="work" className="px-6 md:px-12 lg:px-24 py-24 md:py-32">
+      <SectionHeader label="Work" title="Things I've built" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        {projects.map((project, i) => (
+          <ProjectCard key={project.name} project={project} index={i} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ——— Tech strip ———
+
+function TechStrip() {
+  const tools = [
+    'Flutter', 'React', 'Next.js', 'Go', 'Rust', 'Python', 'Node',
+    'Postgres', 'Firebase', 'Docker', 'GCP', 'Azure', 'Digital Ocean',
+  ];
 
   return (
-    <div className='relative min-h-screen bg-black overflow-x-hidden'>
-      {/* Hero Section */}
-      <HeroSection />
-
-      {/* Timeline Container */}
-      <div className='relative pb-56' ref={containerRef}>
-        {/* Timeline line */}
-        <motion.div
-          className='absolute left-[31px] md:left-1/2 h-full w-0.5 bg-blue-500 origin-top md:-translate-x-1/2'
-          style={{
-            scaleY: scrollYProgress,
-          }}
-        />
-
-        {/* Timeline Items */}
-        <div className='relative z-10 mx-auto max-w-7xl flex flex-col gap-16 md:gap-32 py-16 md:py-32'>
-          <TimelineItem
-            title='JD Builds'
-            subtitle='Software Developer • November 2023 - Present'
-            description={[
-              'Software developer & entrepreneur specializing in building scalable applications from the ground up',
-              'Currently leading development of innovative forest industry solutions while running a successful sports tech company',
-              'Always seeking opportunities to build transformative technology solutions',
-            ]}
-            isLeft={false}
-            details={{
-              technologies: [
-                'Flutter',
-                'NextJS',
-                'Vercel',
-                'React',
-                'Gatsby',
-                'Netlify',
-                'Vue',
-                'Rust',
-                'Actix Web',
-                'Python',
-                'Flask',
-                'Go',
-                'NodeJS',
-                'Docker',
-                'MySQL',
-                'Postgres',
-                'Firebase',
-                'GCP',
-                'Azure',
-                'Digital Ocean',
-                'Serverless',
-              ],
-              achievements: [
-                'Extensive experience in startup environments',
-                'Expert at bringing ideas to production',
-                'Experience scaling software from zero to thousands of users',
-                'Built and deployed many websites and mobile apps',
-              ],
-              links: [
-                { text: 'GitHub', url: 'https://github.com/jonahduckworth' },
-                {
-                  text: 'LinkedIn',
-                  url: 'https://ca.linkedin.com/in/jonah-duckworth',
-                },
-              ],
-            }}
-          />
-
-          <TimelineItem
-            title='Ref Buddy'
-            subtitle='Founder • August 2022 - Present'
-            description={[
-              'Built and launched a comprehensive officiating platform from concept to market',
-              'Led company through pre-accelerator program, established product-market fit, and executed successful go-to-market strategy',
-              'Scaled from initial concept to multiple league partnerships',
-            ]}
-            isLeft={true}
-            details={{
-              technologies: [
-                'Flutter',
-                'NextJS',
-                'Vercel',
-                'Go',
-                'Digital Ocean',
-                'Firebase',
-                'Postgres',
-                'Serverless',
-              ],
-              achievements: [
-                'Built entire platform solo before expanding development team',
-                'Scaled to 200+ active users across multiple leagues',
-                'Brought on CTO, Senior Developer, and first Board Member in 2024',
-                'Successfully hit 8-month technical roadmap targets',
-                'Developed and executed complete business strategy including marketing, sales, and customer acquisition',
-              ],
-              links: [{ text: 'Visit Ref Buddy', url: 'https://refbuddy.ca' }],
-            }}
-          />
-
-          <TimelineItem
-            title='Velocity Showcase'
-            subtitle='November 2024'
-            description="Emcee'd live on stage in front of 200+ people for the Alberta Catalyzer Velocity Showcase"
-            isLeft={false}
-            details={{
-              links: [
-                {
-                  text: 'About Velocity Program',
-                  url: 'https://albertacatalyzer.com/velocity',
-                },
-              ],
-            }}
-          />
-
-          <TimelineItem
-            title='MoneyUp'
-            subtitle='Software Developer • December 2023 - October 2024'
-            description={[
-              'Collaborated with a small team of developers to build a fintech startup application from the ground up',
-              'Identified and resolved critical architectural challenges while implementing robust solutions',
-            ]}
-            isLeft={true}
-            details={{
-              technologies: [
-                'Flutter',
-                'NextJS',
-                'Python',
-                'Flask',
-                'Azure',
-                'Postgres',
-                'RevenueCat',
-              ],
-              achievements: [
-                'Implemented critical system architecture improvements',
-                'Developed and optimized cross-platform mobile and web applications',
-                'Contributed to successful scaling of user base through technical optimizations',
-              ],
-              links: [{ text: 'Visit MoneyUp', url: 'https://moneyup.ca' }],
-            }}
-          />
-
-          <TimelineItem
-            title='Telling It Like It Is Podcast'
-            subtitle='March 2024'
-            description='Spoke with Calgary Angel Investor, Jade Alberts, about all the highs and lows that come with bootstrapping a company to success'
-            isLeft={false}
-            details={{
-              links: [
-                {
-                  text: 'Watch Podcast Interview',
-                  url: 'https://www.youtube.com/live/3199SHJxb8U?si=wxqlNTEjbWT0txjN',
-                },
-              ],
-            }}
-          />
-
-          <TimelineItem
-            title='MRU Tech Liftoff Panel'
-            subtitle='January 2024'
-            description='Spoke on a panel of startup tech founders to share experiences of starting your own company'
-            isLeft={true}
-            details={{
-              links: [
-                {
-                  text: 'About Tech Liftoff',
-                  url: 'https://www.mtroyal.ca/ProgramsCourses/FacultiesSchoolsCentres/Business/Institutes/InstituteInnovationEntrepreneurship/Tech-Liftoff-Business.htm',
-                },
-              ],
-            }}
-          />
-
-          <TimelineItem
-            title='Velocity Showcase'
-            subtitle='November 2023'
-            description='Pitched Ref Buddy live on stage in front of 200+ people after completing the Alberta Catalyzer pre-accelerator program'
-            isLeft={false}
-            details={{
-              links: [
-                {
-                  text: 'About Velocity Program',
-                  url: 'https://albertacatalyzer.com/velocity',
-                },
-              ],
-            }}
-          />
-
-          <TimelineItem
-            title='Logit Analytics'
-            subtitle='Software Developer • May 2022 - December 2022'
-            description={[
-              'Developing innovative solutions for the forestry industry',
-              'Building and maintaining full-stack applications for real-time data analytics',
-            ]}
-            isLeft={true}
-            details={{
-              technologies: [
-                'Flutter',
-                'React',
-                'Python',
-                'Flask',
-                'Firebase',
-                'GCP',
-              ],
-              achievements: [
-                'Developed real-time fire restriction information system for loggers',
-                "Built company's first mobile application using Flutter",
-                'Implemented full-stack features for forestry industry solutions',
-              ],
-              links: [{ text: 'Visit Logit', url: 'https://logitnow.ca' }],
-            }}
-          />
-
-          <TimelineItem
-            title='Education'
-            subtitle='Thompson Rivers University • May 2022'
-            description="Bachelor's Degree in Computing Science"
-            isLeft={false}
-            details={{
-              links: [
-                {
-                  text: 'Visit TRU',
-                  url: 'https://tru.ca',
-                },
-              ],
-            }}
-          />
-        </div>
-      </div>
-    </div>
+    <section className="px-6 md:px-12 lg:px-24 py-16 border-t border-white/[0.04]">
+      <motion.div
+        className="flex flex-wrap gap-3 justify-center"
+        variants={stagger}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-40px' }}
+      >
+        {tools.map((tool, i) => (
+          <motion.span
+            key={tool}
+            className="text-xs font-mono text-muted/50 px-3 py-1.5 rounded-full border border-white/[0.04] hover:border-white/[0.12] hover:text-muted transition-all duration-200"
+            variants={fadeUp}
+            custom={i * 0.03}
+          >
+            {tool}
+          </motion.span>
+        ))}
+      </motion.div>
+    </section>
   );
-};
+}
 
-export default JDBuildsPortfolio;
+// ——— Speaking ———
+
+interface SpeakingItem {
+  title: string;
+  context: string;
+  year: string;
+  description: string;
+  link?: string;
+}
+
+const speakingItems: SpeakingItem[] = [
+  {
+    title: 'Velocity Showcase — Emcee',
+    context: 'Alberta Catalyzer',
+    year: '2024',
+    description: 'Hosted the showcase live on stage, 200+ attendees.',
+    link: 'https://albertacatalyzer.com/velocity',
+  },
+  {
+    title: 'Telling It Like It Is',
+    context: 'Podcast w/ Jade Alberts',
+    year: '2024',
+    description: 'Talked bootstrapping, the real ups and downs of building a company from nothing.',
+    link: 'https://www.youtube.com/live/3199SHJxb8U?si=wxqlNTEjbWT0txjN',
+  },
+  {
+    title: 'Tech Liftoff Panel',
+    context: 'Mount Royal University',
+    year: '2024',
+    description: 'Panel on what it actually takes to start a tech company.',
+    link: 'https://www.mtroyal.ca/ProgramsCourses/FacultiesSchoolsCentres/Business/Institutes/InstituteInnovationEntrepreneurship/Tech-Liftoff-Business.htm',
+  },
+  {
+    title: 'Velocity Showcase — Pitch',
+    context: 'Alberta Catalyzer',
+    year: '2023',
+    description: 'Pitched Ref Buddy to 200+ people after completing the pre-accelerator.',
+    link: 'https://albertacatalyzer.com/velocity',
+  },
+];
+
+function Speaking() {
+  return (
+    <section id="speaking" className="px-6 md:px-12 lg:px-24 py-24 md:py-32 border-t border-white/[0.04]">
+      <SectionHeader label="Speaking" title="Talks & appearances" />
+      <div className="space-y-1">
+        {speakingItems.map((item, i) => (
+          <motion.a
+            key={i}
+            href={item.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 py-4 px-4 -mx-4 rounded-xl hover:bg-white/[0.02] transition-colors duration-200"
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-40px' }}
+            custom={i * 0.08}
+          >
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <h3 className="text-[15px] font-medium text-foreground group-hover:text-accent transition-colors duration-200 truncate">
+                  {item.title}
+                </h3>
+                <svg
+                  className="w-3.5 h-3.5 text-muted/40 group-hover:text-accent flex-shrink-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M7 17 17 7" />
+                  <path d="M7 7h10v10" />
+                </svg>
+              </div>
+              <p className="text-sm text-muted/60 mt-0.5">{item.description}</p>
+            </div>
+            <div className="flex items-center gap-3 sm:ml-8 flex-shrink-0">
+              <span className="text-xs font-mono text-muted/40">{item.context}</span>
+              <span className="text-xs font-mono text-muted/30">{item.year}</span>
+            </div>
+          </motion.a>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+// ——— Education ———
+
+function Education() {
+  return (
+    <section className="px-6 md:px-12 lg:px-24 py-16 border-t border-white/[0.04]">
+      <motion.div
+        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-40px' }}
+        custom={0}
+      >
+        <div>
+          <span className="text-xs font-mono text-accent uppercase tracking-widest mb-2 block">
+            Education
+          </span>
+          <h3 className="text-lg font-medium">BSc Computing Science</h3>
+        </div>
+        <div className="text-sm text-muted font-mono">
+          Thompson Rivers University · 2022
+        </div>
+      </motion.div>
+    </section>
+  );
+}
+
+// ——— Footer ———
+
+function Footer() {
+  const links = [
+    { label: 'GitHub', href: 'https://github.com/jonahduckworth' },
+    { label: 'LinkedIn', href: 'https://ca.linkedin.com/in/jonah-duckworth' },
+    { label: 'Email', href: 'mailto:jonahduckworth@gmail.com' },
+  ];
+
+  return (
+    <footer id="contact" className="px-6 md:px-12 lg:px-24 py-16 md:py-24 border-t border-white/[0.04]">
+      <motion.div
+        className="flex flex-col md:flex-row md:items-end md:justify-between gap-8"
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: '-40px' }}
+        custom={0}
+      >
+        <div>
+          <span className="text-xs font-mono text-accent uppercase tracking-widest mb-3 block">
+            Contact
+          </span>
+          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">
+            Let&apos;s build something.
+          </h2>
+          <p className="text-muted text-sm max-w-md">
+            Open to interesting projects. If you&apos;re a startup that needs to ship, reach out.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-6">
+          {links.map((link) => (
+            <a
+              key={link.label}
+              href={link.href}
+              target={link.href.startsWith('mailto') ? undefined : '_blank'}
+              rel="noopener noreferrer"
+              className="text-sm text-muted hover:text-foreground transition-colors duration-200 underline decoration-white/10 underline-offset-4 hover:decoration-accent/50"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      </motion.div>
+
+      <motion.div
+        className="mt-16 pt-8 border-t border-white/[0.04] text-xs text-muted/30 font-mono"
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        custom={0.1}
+      >
+        © {new Date().getFullYear()} Jonah Duckworth
+      </motion.div>
+    </footer>
+  );
+}
+
+// ——— Page ———
+
+export default function Page() {
+  return (
+    <main className="relative">
+      <Nav />
+      <Hero />
+      <Work />
+      <TechStrip />
+      <Speaking />
+      <Education />
+      <Footer />
+    </main>
+  );
+}
