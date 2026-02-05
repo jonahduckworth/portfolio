@@ -288,14 +288,9 @@ export default function ParticleField() {
         if (p.y < margin) p.vy += bForce * (1 - p.y / margin);
         if (p.y > H - margin) p.vy -= bForce * (1 - (H - p.y) / margin);
 
-        // Gentle spring back to home position (keeps map shape)
-        const HOME_SPRING = 0.008;
-        p.vx += (p.homeX - p.x) * HOME_SPRING;
-        p.vy += (p.homeY - p.y) * HOME_SPRING;
-
         // Tiny organic jitter
-        p.vx += (Math.random() - 0.5) * 0.02;
-        p.vy += (Math.random() - 0.5) * 0.02;
+        p.vx += (Math.random() - 0.5) * 0.04;
+        p.vy += (Math.random() - 0.5) * 0.04;
 
         // Damping
         p.vx *= DAMPING;
