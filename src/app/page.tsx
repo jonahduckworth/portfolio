@@ -285,7 +285,7 @@ function VentureCard({ venture, index }: { venture: Venture; index: number }) {
         <ul className="space-y-2">
           {venture.highlights.map((h, i) => (
             <li key={i} className="flex items-start gap-2.5 text-sm text-muted/80 leading-relaxed">
-              <span className="text-accent/60 mt-1.5 flex-shrink-0">›</span>
+              <span className="text-accent/60 mt-0.5 flex-shrink-0">›</span>
               {h}
             </li>
           ))}
@@ -422,7 +422,7 @@ function WorkCard({ item, index }: { item: WorkItem; index: number }) {
         <ul className="space-y-2">
           {item.highlights.map((h, i) => (
             <li key={i} className="flex items-start gap-2.5 text-sm text-muted/80 leading-relaxed">
-              <span className="text-white/20 mt-1.5 flex-shrink-0">›</span>
+              <span className="text-white/20 mt-0.5 flex-shrink-0">›</span>
               {h}
             </li>
           ))}
