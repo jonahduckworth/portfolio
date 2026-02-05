@@ -76,7 +76,7 @@ function sampleFromRegions(W: number, H: number, count: number): Particle[] {
     mapH = H * 0.95;
     mapW = mapH * mapAspect;
     offsetX = (W - mapW) / 2;
-    offsetY = H * 0.15;
+    offsetY = H * 0.03;
   } else {
     mapW = W * 0.96;
     mapH = mapW / mapAspect;
