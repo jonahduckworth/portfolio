@@ -67,21 +67,36 @@ interface Particle {
 }
 
 function sampleFromRegions(W: number, H: number, count: number): Particle[] {
-  // Maintain ~2:1 aspect ratio for the world map, centered
-  const mapAspect = 2;
-  const viewAspect = W / H;
+  const isPortrait = W < H;
 
   let mapW: number, mapH: number, offsetX: number, offsetY: number;
-  if (viewAspect > mapAspect) {
-    mapH = H * 0.95;
-    mapW = mapH * mapAspect;
-    offsetX = (W - mapW) / 2;
-    offsetY = H * 0.03;
-  } else {
-    mapW = W * 0.96;
+
+  if (isPortrait) {
+    // Vertical map: swap axes so Americas at top, Australia at bottom
+    const mapAspect = 0.5; // tall
+    mapW = W * 0.90;
     mapH = mapW / mapAspect;
-    offsetX = W * 0.02;
-    offsetY = (H - mapH) / 2 + H * 0.15;
+    if (mapH > H * 0.85) {
+      mapH = H * 0.85;
+      mapW = mapH * mapAspect;
+    }
+    offsetX = (W - mapW) / 2;
+    offsetY = H * 0.08;
+  } else {
+    // Horizontal map (desktop)
+    const mapAspect = 2;
+    const viewAspect = W / H;
+    if (viewAspect > mapAspect) {
+      mapH = H * 0.95;
+      mapW = mapH * mapAspect;
+      offsetX = (W - mapW) / 2;
+      offsetY = H * 0.03;
+    } else {
+      mapW = W * 0.96;
+      mapH = mapW / mapAspect;
+      offsetX = W * 0.02;
+      offsetY = (H - mapH) / 2 + H * 0.15;
+    }
   }
 
   const areas = LAND_REGIONS.map(([, , rx, ry]) => Math.PI * rx * ry);
@@ -104,8 +119,16 @@ function sampleFromRegions(W: number, H: number, count: number): Particle[] {
 
     const angle = Math.random() * Math.PI * 2;
     const rad = Math.sqrt(Math.random());
-    const nx = cx + Math.cos(angle) * rx * rad;
-    const ny = cy + Math.sin(angle) * ry * rad;
+
+    let nx: number, ny: number;
+    if (isPortrait) {
+      // Rotate 90°: map x → screen y, map y → screen x
+      nx = cy + Math.sin(angle) * ry * rad;
+      ny = cx + Math.cos(angle) * rx * rad;
+    } else {
+      nx = cx + Math.cos(angle) * rx * rad;
+      ny = cy + Math.sin(angle) * ry * rad;
+    }
 
     const px = offsetX + nx * mapW;
     const py = offsetY + ny * mapH;
