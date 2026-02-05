@@ -81,7 +81,7 @@ function sampleFromRegions(W: number, H: number, count: number): Particle[] {
     mapW = W * 0.96;
     mapH = mapW / mapAspect;
     offsetX = W * 0.02;
-    offsetY = (H - mapH) / 2;
+    offsetY = (H - mapH) / 2 + H * 0.15;
   }
 
   const areas = LAND_REGIONS.map(([, , rx, ry]) => Math.PI * rx * ry);
