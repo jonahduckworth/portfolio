@@ -541,7 +541,7 @@ function TechStrip() {
       >
         {categories.map((cat) => (
           <div key={cat.label} className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <span className="text-xs font-mono text-muted/55 uppercase tracking-widest w-20 flex-shrink-0">
+            <span className="text-xs font-mono text-muted/70 uppercase tracking-widest w-20 flex-shrink-0">
               {cat.label}
             </span>
             <div className="flex flex-wrap gap-2">
@@ -620,7 +620,7 @@ function Speaking() {
             href={item.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 py-4 px-4 -mx-4 rounded-xl hover:bg-white/[0.02] transition-colors duration-200"
+            className="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 py-5 px-5 -mx-5 rounded-xl border border-transparent hover:border-white/[0.08] hover:bg-white/[0.03] transition-all duration-200"
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
@@ -645,11 +645,11 @@ function Speaking() {
                   <path d="M7 7h10v10" />
                 </svg>
               </div>
-              <p className="text-sm text-muted/75 mt-0.5">{item.description}</p>
+              <p className="text-sm text-muted mt-0.5">{item.description}</p>
             </div>
             <div className="flex items-center gap-3 sm:ml-8 flex-shrink-0">
-              <span className="text-xs font-mono text-muted/55">{item.context}</span>
-              <span className="text-xs font-mono text-muted/45">{item.year}</span>
+              <span className="text-xs font-mono text-muted/80">{item.context}</span>
+              <span className="text-xs font-mono text-muted/65">{item.year}</span>
             </div>
           </motion.a>
         ))}
