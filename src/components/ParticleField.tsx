@@ -8,12 +8,15 @@ const CODE_CHARS = ['{', '}', '<', '>', '/', '=', ';', '(', ')', '[', ']', '&', 
 // Normalized 0-1 coords, roughly equirectangular projection
 const LAND_REGIONS: [number, number, number, number][] = [
   // North America
-  [0.12, 0.15, 0.06, 0.06],
-  [0.16, 0.24, 0.06, 0.05],
-  [0.18, 0.32, 0.05, 0.04],
-  [0.14, 0.38, 0.025, 0.04],
-  [0.06, 0.16, 0.025, 0.03],
-  [0.30, 0.10, 0.025, 0.03],
+  [0.10, 0.18, 0.04, 0.04],   // Western Canada / BC / Alberta
+  [0.17, 0.16, 0.05, 0.04],   // Eastern Canada / Ontario / Quebec
+  [0.24, 0.13, 0.03, 0.03],   // Atlantic Canada / Maritimes
+  [0.13, 0.26, 0.05, 0.04],   // Northern US (Washington to Great Lakes)
+  [0.16, 0.33, 0.05, 0.03],   // Southern US
+  [0.22, 0.30, 0.02, 0.03],   // US East Coast
+  [0.12, 0.39, 0.025, 0.03],  // Mexico
+  [0.05, 0.17, 0.02, 0.025],  // Alaska
+  [0.29, 0.10, 0.025, 0.03],  // Greenland
 
   // South America
   [0.26, 0.48, 0.04, 0.04],
@@ -66,15 +69,15 @@ function sampleFromRegions(W: number, H: number, count: number): Particle[] {
 
   let mapW: number, mapH: number, offsetX: number, offsetY: number;
   if (viewAspect > mapAspect) {
-    mapH = H * 0.88;
+    mapH = H * 0.80;
     mapW = mapH * mapAspect;
     offsetX = (W - mapW) / 2;
-    offsetY = H * 0.06;
+    offsetY = H * 0.12;
   } else {
-    mapW = W * 0.92;
+    mapW = W * 0.90;
     mapH = mapW / mapAspect;
-    offsetX = W * 0.04;
-    offsetY = (H - mapH) / 2;
+    offsetX = W * 0.05;
+    offsetY = (H - mapH) / 2 + H * 0.06;
   }
 
   const areas = LAND_REGIONS.map(([, , rx, ry]) => Math.PI * rx * ry);
