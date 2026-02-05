@@ -25,16 +25,20 @@ const LAND_REGIONS: [number, number, number, number][] = [
   [0.24, 0.74, 0.012, 0.03],
 
   // Europe
-  [0.49, 0.20, 0.035, 0.05],
-  [0.53, 0.14, 0.02, 0.04],
-  [0.46, 0.28, 0.02, 0.02],
-  [0.53, 0.26, 0.02, 0.015],
+  [0.47, 0.18, 0.03, 0.03],   // UK / France / Benelux
+  [0.52, 0.17, 0.03, 0.04],   // Germany / Poland / Baltics
+  [0.53, 0.11, 0.02, 0.03],   // Scandinavia
+  [0.45, 0.27, 0.02, 0.02],   // Iberian Peninsula
+  [0.50, 0.25, 0.03, 0.02],   // Italy / Balkans / Greece
+  [0.57, 0.20, 0.03, 0.03],   // Eastern Europe / Ukraine
 
   // Africa
-  [0.49, 0.36, 0.05, 0.04],
-  [0.50, 0.47, 0.04, 0.06],
-  [0.53, 0.57, 0.025, 0.04],
-  [0.51, 0.65, 0.02, 0.025],
+  [0.48, 0.34, 0.06, 0.04],   // North Africa (Morocco to Egypt)
+  [0.47, 0.42, 0.03, 0.04],   // West Africa
+  [0.52, 0.42, 0.03, 0.04],   // Central/East Africa north
+  [0.50, 0.52, 0.04, 0.06],   // Central Africa
+  [0.52, 0.62, 0.025, 0.04],  // East Africa south
+  [0.49, 0.68, 0.02, 0.025],  // Southern Africa
 
   // Asia
   [0.62, 0.12, 0.08, 0.04],
@@ -47,9 +51,9 @@ const LAND_REGIONS: [number, number, number, number][] = [
   [0.58, 0.30, 0.025, 0.025],
 
   // Oceania
-  [0.86, 0.63, 0.05, 0.035],
-  [0.80, 0.42, 0.03, 0.012],
-  [0.93, 0.71, 0.012, 0.015],
+  [0.85, 0.61, 0.06, 0.05],   // Australia (bigger)
+  [0.80, 0.42, 0.035, 0.015], // Indonesia
+  [0.93, 0.72, 0.015, 0.02],  // New Zealand
 ];
 
 interface Particle {
