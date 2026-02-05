@@ -67,26 +67,33 @@ interface Particle {
 }
 
 function sampleFromRegions(W: number, H: number, count: number): Particle[] {
-  const mapAspect = 2;
-  const viewAspect = W / H;
+  const isPortrait = W < H;
 
   let mapW: number, mapH: number, offsetX: number, offsetY: number;
 
-  if (viewAspect > mapAspect) {
-    // Ultra-wide: fit to height
-    mapH = H * 0.95;
+  if (isPortrait) {
+    // Vertical map: 1:2 aspect (tall), fit to screen
+    const mapAspect = 0.5;
+    mapH = H * 0.85;
     mapW = mapH * mapAspect;
+    if (mapW > W * 0.90) {
+      mapW = W * 0.90;
+      mapH = mapW / mapAspect;
+    }
     offsetX = (W - mapW) / 2;
-    offsetY = H * 0.03;
+    offsetY = H * 0.06;
   } else {
-    // Normal + portrait: fit to width, center vertically
-    mapW = W * 0.96;
-    mapH = mapW / mapAspect;
-    offsetX = W * 0.02;
-    // On portrait, push map into upper-middle area
-    if (W < H) {
-      offsetY = H * 0.10;
+    const mapAspect = 2;
+    const viewAspect = W / H;
+    if (viewAspect > mapAspect) {
+      mapH = H * 0.95;
+      mapW = mapH * mapAspect;
+      offsetX = (W - mapW) / 2;
+      offsetY = H * 0.03;
     } else {
+      mapW = W * 0.96;
+      mapH = mapW / mapAspect;
+      offsetX = W * 0.02;
       offsetY = (H - mapH) / 2 + H * 0.15;
     }
   }
@@ -112,8 +119,19 @@ function sampleFromRegions(W: number, H: number, count: number): Particle[] {
     const angle = Math.random() * Math.PI * 2;
     const rad = Math.sqrt(Math.random());
 
-    const nx = cx + Math.cos(angle) * rx * rad;
-    const ny = cy + Math.sin(angle) * ry * rad;
+    let nx: number, ny: number;
+    if (isPortrait) {
+      // Rotate 90° CW: (x,y) → (1-y, x), swap radii to preserve shapes
+      const rcx = 1 - cy;
+      const rcy = cx;
+      const rrx = ry; // horizontal radius becomes what was vertical
+      const rry = rx; // vertical radius becomes what was horizontal
+      nx = rcx + Math.cos(angle) * rrx * rad;
+      ny = rcy + Math.sin(angle) * rry * rad;
+    } else {
+      nx = cx + Math.cos(angle) * rx * rad;
+      ny = cy + Math.sin(angle) * ry * rad;
+    }
 
     const px = offsetX + nx * mapW;
     const py = offsetY + ny * mapH;
