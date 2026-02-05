@@ -72,16 +72,15 @@ function sampleFromRegions(W: number, H: number, count: number): Particle[] {
   let mapW: number, mapH: number, offsetX: number, offsetY: number;
 
   if (isPortrait) {
-    // Vertical map: 1:2 aspect (tall), fit to screen
-    const mapAspect = 0.5;
-    mapH = H * 0.85;
-    mapW = mapH * mapAspect;
-    if (mapW > W * 0.90) {
-      mapW = W * 0.90;
-      mapH = mapW / mapAspect;
+    // Portrait: fill width, let height follow naturally
+    mapW = W * 0.92;
+    mapH = mapW * 2; // 1:2 aspect (rotated from 2:1)
+    if (mapH > H * 0.88) {
+      mapH = H * 0.88;
+      mapW = mapH / 2;
     }
     offsetX = (W - mapW) / 2;
-    offsetY = H * 0.06;
+    offsetY = H * 0.04;
   } else {
     const mapAspect = 2;
     const viewAspect = W / H;
@@ -175,7 +174,10 @@ export default function ParticleField() {
       canvas.style.height = `${H}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const count = Math.min(1000, Math.max(300, Math.floor((W * H) / 1600)));
+      // More particles on mobile for denser map
+      const isMobile = W < 640;
+      const divisor = isMobile ? 600 : 1600;
+      const count = Math.min(1000, Math.max(400, Math.floor((W * H) / divisor)));
       particlesRef.current = sampleFromRegions(W, H, count);
     };
 
