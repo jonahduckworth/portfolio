@@ -8,6 +8,23 @@ const ParticleField = dynamic(() => import('@/components/ParticleField'), {
   ssr: false,
 });
 
+// ——— Shared animation variants ———
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.25, 0.4, 0.25, 1] },
+  },
+};
+
+const stagger = {
+  visible: {
+    transition: { staggerChildren: 0.08 },
+  },
+};
+
 // ——— Nav ———
 
 function Nav() {
@@ -175,9 +192,9 @@ function SectionHeader({ label, title }: { label: string; title: string }) {
   return (
     <motion.div
       className="mb-12 md:mb-16"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
       viewport={{ once: true, margin: '-80px' }}
     >
       <span className="text-xs font-mono text-accent uppercase tracking-widest mb-3 block">
@@ -212,9 +229,9 @@ function VentureCard({ venture }: { venture: Venture }) {
           ? 'border-accent/30 bg-accent/[0.04] hover:border-accent/50 hover:bg-accent/[0.06]'
           : 'border-white/[0.10] bg-white/[0.03] hover:border-white/[0.18] hover:bg-white/[0.05]'
       }`}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
       viewport={{ once: true, margin: '-60px' }}
     >
       {venture.featured && (
@@ -360,9 +377,9 @@ function WorkCard({ item }: { item: WorkItem }) {
   const inner = (
     <motion.div
       className="group relative p-6 md:p-8 rounded-2xl border border-white/[0.10] bg-white/[0.03] hover:border-white/[0.18] hover:bg-white/[0.05] transition-all duration-300"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+      variants={fadeUp}
+      initial="hidden"
+      whileInView="visible"
       viewport={{ once: true, margin: '-60px' }}
     >
       <div className="flex flex-col gap-4">
@@ -510,9 +527,9 @@ function TechStrip() {
     <section className="px-6 md:px-12 lg:px-24 py-16 border-t border-white/[0.06]">
       <motion.div
         className="space-y-6"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+        variants={stagger}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true, margin: '-40px' }}
       >
         {categories.map((cat) => (
@@ -522,12 +539,13 @@ function TechStrip() {
             </span>
             <div className="flex flex-wrap gap-2">
               {cat.tools.map((tool) => (
-                <span
+                <motion.span
                   key={tool}
                   className="text-xs font-mono text-muted/65 px-3 py-1.5 rounded-full border border-white/[0.07] hover:border-white/[0.12] hover:text-muted transition-all duration-200"
+                  variants={fadeUp}
                 >
                   {tool}
-                </span>
+                </motion.span>
               ))}
             </div>
           </div>
@@ -595,9 +613,9 @@ function Speaking() {
             target="_blank"
             rel="noopener noreferrer"
             className="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 py-5 px-5 -mx-5 rounded-xl border border-transparent hover:border-white/[0.08] hover:bg-white/[0.03] transition-all duration-200"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true, margin: '-40px' }}
           >
             <div className="flex-1 min-w-0">
@@ -638,9 +656,9 @@ function Education() {
     <section className="px-6 md:px-12 lg:px-24 py-16 border-t border-white/[0.06]">
       <motion.div
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true, margin: '-40px' }}
       >
         <div>
@@ -673,9 +691,9 @@ function Footer() {
     >
       <motion.div
         className="flex flex-col md:flex-row md:items-end md:justify-between gap-8"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true, margin: '-40px' }}
       >
         <div>
@@ -708,9 +726,9 @@ function Footer() {
 
       <motion.div
         className="mt-16 pt-8 border-t border-white/[0.06] text-xs text-muted/45 font-mono"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+        variants={fadeUp}
+        initial="hidden"
+        whileInView="visible"
         viewport={{ once: true }}
       >
         © {new Date().getFullYear()} Jonah Duckworth
