@@ -4,11 +4,11 @@
 
 :root {
   --background: #0a0a0b;
-  --foreground: #e8e8e8;
+  --foreground: #ececec;
   --accent: #f97316;
-  --muted: #7a7a7a;
-  --border: #1e1e1e;
-  --card: #101012;
+  --muted: #8a8a8a;
+  --border: #252525;
+  --card: #131315;
 }
 
 * {

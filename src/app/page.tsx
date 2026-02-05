@@ -30,7 +30,7 @@ const stagger = {
 function Nav() {
   return (
     <motion.nav
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 bg-background/80 backdrop-blur-md border-b border-white/[0.04]"
+      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 bg-background/80 backdrop-blur-md border-b border-white/[0.06]"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 }}
@@ -231,8 +231,8 @@ function VentureCard({ venture, index }: { venture: Venture; index: number }) {
     <motion.div
       className={`group relative p-6 md:p-8 rounded-2xl border transition-all duration-300 ${
         venture.featured
-          ? 'border-accent/20 bg-accent/[0.02] hover:border-accent/40 hover:bg-accent/[0.04]'
-          : 'border-white/[0.06] bg-white/[0.01] hover:border-white/[0.12] hover:bg-white/[0.03]'
+          ? 'border-accent/30 bg-accent/[0.04] hover:border-accent/50 hover:bg-accent/[0.06]'
+          : 'border-white/[0.10] bg-white/[0.03] hover:border-white/[0.18] hover:bg-white/[0.05]'
       }`}
       variants={fadeUp}
       initial="hidden"
@@ -284,7 +284,7 @@ function VentureCard({ venture, index }: { venture: Venture; index: number }) {
 
         <ul className="space-y-2">
           {venture.highlights.map((h, i) => (
-            <li key={i} className="flex items-start gap-2.5 text-sm text-muted/70 leading-relaxed">
+            <li key={i} className="flex items-start gap-2.5 text-sm text-muted/80 leading-relaxed">
               <span className="text-accent/60 mt-1.5 flex-shrink-0">›</span>
               {h}
             </li>
@@ -295,7 +295,7 @@ function VentureCard({ venture, index }: { venture: Venture; index: number }) {
           {venture.tech.map((t) => (
             <span
               key={t}
-              className="text-xs font-mono text-muted/70 px-2.5 py-1 rounded-md bg-white/[0.03] border border-white/[0.04]"
+              className="text-xs font-mono text-muted/80 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/[0.07]"
             >
               {t}
             </span>
@@ -354,7 +354,7 @@ function Ventures() {
   return (
     <section
       id="ventures"
-      className="px-6 md:px-12 lg:px-24 py-24 md:py-32 border-t border-white/[0.04]"
+      className="px-6 md:px-12 lg:px-24 py-24 md:py-32 border-t border-white/[0.06]"
     >
       <SectionHeader label="Ventures" title="Companies I founded" />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
@@ -382,7 +382,7 @@ interface WorkItem {
 function WorkCard({ item, index }: { item: WorkItem; index: number }) {
   const inner = (
     <motion.div
-      className="group relative p-6 md:p-8 rounded-2xl border border-white/[0.06] bg-white/[0.01] hover:border-white/[0.12] hover:bg-white/[0.03] transition-all duration-300"
+      className="group relative p-6 md:p-8 rounded-2xl border border-white/[0.10] bg-white/[0.03] hover:border-white/[0.18] hover:bg-white/[0.05] transition-all duration-300"
       variants={fadeUp}
       initial="hidden"
       whileInView="visible"
@@ -421,7 +421,7 @@ function WorkCard({ item, index }: { item: WorkItem; index: number }) {
 
         <ul className="space-y-2">
           {item.highlights.map((h, i) => (
-            <li key={i} className="flex items-start gap-2.5 text-sm text-muted/70 leading-relaxed">
+            <li key={i} className="flex items-start gap-2.5 text-sm text-muted/80 leading-relaxed">
               <span className="text-white/20 mt-1.5 flex-shrink-0">›</span>
               {h}
             </li>
@@ -432,7 +432,7 @@ function WorkCard({ item, index }: { item: WorkItem; index: number }) {
           {item.tech.map((t) => (
             <span
               key={t}
-              className="text-xs font-mono text-muted/70 px-2.5 py-1 rounded-md bg-white/[0.03] border border-white/[0.04]"
+              className="text-xs font-mono text-muted/80 px-2.5 py-1 rounded-md bg-white/[0.05] border border-white/[0.07]"
             >
               {t}
             </span>
@@ -531,7 +531,7 @@ function TechStrip() {
   ];
 
   return (
-    <section className="px-6 md:px-12 lg:px-24 py-16 border-t border-white/[0.04]">
+    <section className="px-6 md:px-12 lg:px-24 py-16 border-t border-white/[0.06]">
       <motion.div
         className="space-y-6"
         variants={stagger}
@@ -541,14 +541,14 @@ function TechStrip() {
       >
         {categories.map((cat) => (
           <div key={cat.label} className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <span className="text-xs font-mono text-muted/40 uppercase tracking-widest w-20 flex-shrink-0">
+            <span className="text-xs font-mono text-muted/55 uppercase tracking-widest w-20 flex-shrink-0">
               {cat.label}
             </span>
             <div className="flex flex-wrap gap-2">
               {cat.tools.map((tool, i) => (
                 <motion.span
                   key={tool}
-                  className="text-xs font-mono text-muted/50 px-3 py-1.5 rounded-full border border-white/[0.04] hover:border-white/[0.12] hover:text-muted transition-all duration-200"
+                  className="text-xs font-mono text-muted/65 px-3 py-1.5 rounded-full border border-white/[0.07] hover:border-white/[0.12] hover:text-muted transition-all duration-200"
                   variants={fadeUp}
                   custom={i * 0.03}
                 >
@@ -610,7 +610,7 @@ function Speaking() {
   return (
     <section
       id="speaking"
-      className="px-6 md:px-12 lg:px-24 py-24 md:py-32 border-t border-white/[0.04]"
+      className="px-6 md:px-12 lg:px-24 py-24 md:py-32 border-t border-white/[0.06]"
     >
       <SectionHeader label="Speaking" title="Talks & appearances" />
       <div className="space-y-1">
@@ -633,7 +633,7 @@ function Speaking() {
                   {item.title}
                 </h3>
                 <svg
-                  className="w-3.5 h-3.5 text-muted/40 group-hover:text-accent flex-shrink-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  className="w-3.5 h-3.5 text-muted/55 group-hover:text-accent flex-shrink-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -645,11 +645,11 @@ function Speaking() {
                   <path d="M7 7h10v10" />
                 </svg>
               </div>
-              <p className="text-sm text-muted/60 mt-0.5">{item.description}</p>
+              <p className="text-sm text-muted/75 mt-0.5">{item.description}</p>
             </div>
             <div className="flex items-center gap-3 sm:ml-8 flex-shrink-0">
-              <span className="text-xs font-mono text-muted/40">{item.context}</span>
-              <span className="text-xs font-mono text-muted/30">{item.year}</span>
+              <span className="text-xs font-mono text-muted/55">{item.context}</span>
+              <span className="text-xs font-mono text-muted/45">{item.year}</span>
             </div>
           </motion.a>
         ))}
@@ -662,7 +662,7 @@ function Speaking() {
 
 function Education() {
   return (
-    <section className="px-6 md:px-12 lg:px-24 py-16 border-t border-white/[0.04]">
+    <section className="px-6 md:px-12 lg:px-24 py-16 border-t border-white/[0.06]">
       <motion.div
         className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
         variants={fadeUp}
@@ -697,7 +697,7 @@ function Footer() {
   return (
     <footer
       id="contact"
-      className="px-6 md:px-12 lg:px-24 py-16 md:py-24 border-t border-white/[0.04]"
+      className="px-6 md:px-12 lg:px-24 py-16 md:py-24 border-t border-white/[0.06]"
     >
       <motion.div
         className="flex flex-col md:flex-row md:items-end md:justify-between gap-8"
@@ -736,7 +736,7 @@ function Footer() {
       </motion.div>
 
       <motion.div
-        className="mt-16 pt-8 border-t border-white/[0.04] text-xs text-muted/30 font-mono"
+        className="mt-16 pt-8 border-t border-white/[0.06] text-xs text-muted/45 font-mono"
         variants={fadeUp}
         initial="hidden"
         whileInView="visible"
