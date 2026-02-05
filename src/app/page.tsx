@@ -11,12 +11,12 @@ const ParticleField = dynamic(() => import('@/components/ParticleField'), {
 // ——— Shared animation variants ———
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: (delay: number = 0) => ({
+  hidden: { opacity: 0, y: 20 },
+  visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, delay, ease: [0.25, 0.4, 0.25, 1] },
-  }),
+    transition: { duration: 0.6, ease: [0.25, 0.4, 0.25, 1] },
+  },
 };
 
 const stagger = {
@@ -89,10 +89,9 @@ function Hero() {
       <div className="relative z-10 max-w-3xl">
         <motion.div
           className="flex items-center gap-3 mb-8"
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={0.2}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
         >
           <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
           <span className="text-sm font-mono text-muted">Calgary, AB</span>
@@ -100,10 +99,9 @@ function Hero() {
 
         <motion.h1
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.08] mb-6"
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={0.3}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
         >
           I build software
           <br />
@@ -112,10 +110,9 @@ function Hero() {
 
         <motion.p
           className="text-lg md:text-xl text-muted max-w-xl leading-relaxed mb-10"
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={0.45}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.45, ease: [0.25, 0.4, 0.25, 1] }}
         >
           Developer and entrepreneur. Founded{' '}
           <a
@@ -140,10 +137,9 @@ function Hero() {
 
         <motion.div
           className="flex flex-wrap gap-3"
-          variants={fadeUp}
-          initial="hidden"
-          animate="visible"
-          custom={0.6}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
         >
           <a
             href="#work"
@@ -200,7 +196,6 @@ function SectionHeader({ label, title }: { label: string; title: string }) {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-80px' }}
-      custom={0}
     >
       <span className="text-xs font-mono text-accent uppercase tracking-widest mb-3 block">
         {label}
@@ -238,7 +233,6 @@ function VentureCard({ venture, index }: { venture: Venture; index: number }) {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-60px' }}
-      custom={index * 0.1}
     >
       {venture.featured && (
         <div className="absolute top-4 right-4 md:top-6 md:right-6">
@@ -387,7 +381,6 @@ function WorkCard({ item, index }: { item: WorkItem; index: number }) {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-60px' }}
-      custom={index * 0.1}
     >
       <div className="flex flex-col gap-4">
         <div>
@@ -550,7 +543,6 @@ function TechStrip() {
                   key={tool}
                   className="text-xs font-mono text-muted/65 px-3 py-1.5 rounded-full border border-white/[0.07] hover:border-white/[0.12] hover:text-muted transition-all duration-200"
                   variants={fadeUp}
-                  custom={i * 0.03}
                 >
                   {tool}
                 </motion.span>
@@ -625,7 +617,6 @@ function Speaking() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-40px' }}
-            custom={i * 0.08}
           >
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
@@ -669,7 +660,6 @@ function Education() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: '-40px' }}
-        custom={0}
       >
         <div>
           <span className="text-xs font-mono text-accent uppercase tracking-widest mb-2 block">
@@ -705,7 +695,6 @@ function Footer() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: '-40px' }}
-        custom={0}
       >
         <div>
           <span className="text-xs font-mono text-accent uppercase tracking-widest mb-3 block">
@@ -741,7 +730,6 @@ function Footer() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        custom={0.1}
       >
         © {new Date().getFullYear()} Jonah Duckworth
       </motion.div>
