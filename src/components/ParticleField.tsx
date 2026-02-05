@@ -66,7 +66,7 @@ interface Particle {
   group: number;
 }
 
-function sampleFromRegions(W: number, H: number, count: number): Particle[] {
+function sampleFromRegions(W: number, H: number, count: number, isMobile: boolean = false): Particle[] {
   // Maintain ~2:1 aspect ratio for the world map, centered
   const mapAspect = 2;
   const viewAspect = W / H;
@@ -116,7 +116,9 @@ function sampleFromRegions(W: number, H: number, count: number): Particle[] {
       vx: (Math.random() - 0.5) * 0.3,
       vy: (Math.random() - 0.5) * 0.3,
       char: CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)],
-      alpha: 0.22 + Math.random() * 0.38,
+      alpha: isMobile
+        ? 0.10 + Math.random() * 0.20
+        : 0.22 + Math.random() * 0.38,
       group: Math.floor(Math.random() * 4),
     });
   }
@@ -149,8 +151,11 @@ export default function ParticleField() {
       canvas.style.height = `${H}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const count = Math.min(1000, Math.max(300, Math.floor((W * H) / 1600)));
-      particlesRef.current = sampleFromRegions(W, H, count);
+      const isMobile = W < 640;
+      const count = isMobile
+        ? Math.min(300, Math.floor((W * H) / 2500))
+        : Math.min(1000, Math.max(300, Math.floor((W * H) / 1600)));
+      particlesRef.current = sampleFromRegions(W, H, count, isMobile);
     };
 
     handleResize();
@@ -279,7 +284,7 @@ export default function ParticleField() {
 
       // Render
       ctx.clearRect(0, 0, W, H);
-      ctx.font = '10px "Geist Mono", ui-monospace, monospace';
+      ctx.font = `${W < 640 ? 8 : 10}px "Geist Mono", ui-monospace, monospace`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
