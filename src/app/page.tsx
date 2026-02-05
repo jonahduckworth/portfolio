@@ -30,36 +30,36 @@ const stagger = {
 function Nav() {
   return (
     <motion.nav
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 bg-background/80 backdrop-blur-md border-b border-white/[0.06]"
+      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-12 py-3.5 sm:py-5 bg-background/80 backdrop-blur-md border-b border-white/[0.06]"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 }}
     >
-      <a href="#" className="text-sm font-medium tracking-tight text-foreground">
+      <a href="#" className="text-xs sm:text-sm font-medium tracking-tight text-foreground">
         jonah duckworth
       </a>
-      <div className="flex items-center gap-6">
+      <div className="flex items-center gap-3 sm:gap-6">
         <a
           href="#work"
-          className="text-sm text-muted hover:text-foreground transition-colors duration-200"
+          className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors duration-200"
         >
           work
         </a>
         <a
           href="#ventures"
-          className="text-sm text-muted hover:text-foreground transition-colors duration-200"
+          className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors duration-200"
         >
           ventures
         </a>
         <a
           href="#speaking"
-          className="text-sm text-muted hover:text-foreground transition-colors duration-200"
+          className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors duration-200"
         >
           speaking
         </a>
         <a
           href="#contact"
-          className="text-sm text-muted hover:text-foreground transition-colors duration-200"
+          className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors duration-200"
         >
           contact
         </a>
@@ -725,7 +725,7 @@ function Footer() {
       </motion.div>
 
       <motion.div
-        className="mt-16 pt-8 border-t border-white/[0.06] text-xs text-muted/45 font-mono"
+        className="mt-16 pt-8 border-t border-white/[0.06] text-xs text-muted/70 font-mono"
         variants={fadeUp}
         initial="hidden"
         whileInView="visible"
