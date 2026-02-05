@@ -305,7 +305,8 @@ export default function ParticleField() {
 
       // Render
       ctx.clearRect(0, 0, W, H);
-      ctx.font = '10px "Geist Mono", ui-monospace, monospace';
+      const fontSize = W < 640 ? 7 : 10;
+      ctx.font = `${fontSize}px "Geist Mono", ui-monospace, monospace`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
