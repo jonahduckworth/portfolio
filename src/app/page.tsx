@@ -2,6 +2,11 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
+import dynamic from 'next/dynamic';
+
+const ParticleField = dynamic(() => import('@/components/ParticleField'), {
+  ssr: false,
+});
 
 // ——— Shared animation variants ———
 
@@ -77,13 +82,13 @@ function Hero() {
   return (
     <motion.section
       ref={ref}
-      className="relative min-h-[100svh] flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-20"
+      className="relative min-h-[100svh] flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-20 overflow-hidden"
       style={{ opacity, y }}
     >
-      {/* Subtle gradient orb */}
-      <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-accent/[0.03] rounded-full blur-[120px] pointer-events-none" />
+      {/* Particle field background */}
+      <ParticleField />
 
-      <div className="max-w-3xl">
+      <div className="relative z-10 max-w-3xl">
         <motion.div
           className="flex items-center gap-3 mb-8"
           variants={fadeUp}
@@ -172,7 +177,7 @@ function Hero() {
 
       {/* Scroll indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5 }}
