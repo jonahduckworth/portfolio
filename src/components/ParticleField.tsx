@@ -109,7 +109,7 @@ function sampleFromRegions(W: number, H: number, count: number): Particle[] {
       vx: (Math.random() - 0.5) * 0.3,
       vy: (Math.random() - 0.5) * 0.3,
       char: CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)],
-      alpha: 0.12 + Math.random() * 0.28,
+      alpha: 0.25 + Math.random() * 0.45,
       group: Math.floor(Math.random() * 4),
     });
   }
@@ -142,7 +142,7 @@ export default function ParticleField() {
       canvas.style.height = `${H}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const count = Math.min(600, Math.max(200, Math.floor((W * H) / 2500)));
+      const count = Math.min(2000, Math.max(600, Math.floor((W * H) / 800)));
       particlesRef.current = sampleFromRegions(W, H, count);
     };
 
@@ -272,7 +272,7 @@ export default function ParticleField() {
 
       // Render
       ctx.clearRect(0, 0, W, H);
-      ctx.font = '10px "Geist Mono", ui-monospace, monospace';
+      ctx.font = '11px "Geist Mono", ui-monospace, monospace';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
 
@@ -280,16 +280,16 @@ export default function ParticleField() {
         const p = particles[i];
         switch (p.group) {
           case 0:
-            ctx.fillStyle = `rgba(249, 115, 22, ${p.alpha * 0.9})`;
+            ctx.fillStyle = `rgba(249, 115, 22, ${p.alpha * 0.95})`;
             break;
           case 1:
-            ctx.fillStyle = `rgba(245, 235, 220, ${p.alpha * 0.5})`;
+            ctx.fillStyle = `rgba(245, 235, 220, ${p.alpha * 0.7})`;
             break;
           case 2:
-            ctx.fillStyle = `rgba(160, 160, 180, ${p.alpha * 0.35})`;
+            ctx.fillStyle = `rgba(180, 180, 200, ${p.alpha * 0.55})`;
             break;
           default:
-            ctx.fillStyle = `rgba(120, 120, 140, ${p.alpha * 0.25})`;
+            ctx.fillStyle = `rgba(150, 150, 170, ${p.alpha * 0.45})`;
             break;
         }
         ctx.fillText(p.char, p.x, p.y);
