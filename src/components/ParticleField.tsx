@@ -266,7 +266,7 @@ export default function ParticleField() {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 pointer-events-none"
+      className="fixed inset-0 pointer-events-none z-0"
       aria-hidden="true"
     />
   );

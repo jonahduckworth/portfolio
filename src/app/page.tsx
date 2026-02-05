@@ -82,11 +82,9 @@ function Hero() {
   return (
     <motion.section
       ref={ref}
-      className="relative min-h-[100svh] flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-20 overflow-hidden"
+      className="relative min-h-[100svh] flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-20"
       style={{ opacity, y }}
     >
-      {/* Particle field background */}
-      <ParticleField />
 
       <div className="relative z-10 max-w-3xl">
         <motion.div
@@ -756,6 +754,7 @@ function Footer() {
 export default function Page() {
   return (
     <main className="relative">
+      <ParticleField />
       <Nav />
       <Hero />
       <Ventures />
