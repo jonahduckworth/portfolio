@@ -213,11 +213,11 @@ export default function ParticleField() {
       }
 
       // Original physics: short-range repulsion + medium-range attraction
-      const REPEL_DIST = 25;
-      const REPEL_STRENGTH = 0.6;
-      const ATTRACT_MIN = 25;
-      const ATTRACT_MAX = 55;
-      const ATTRACT_STRENGTH = 0.015;
+      const REPEL_DIST = 18;
+      const REPEL_STRENGTH = 0.3;
+      const ATTRACT_MIN = 18;
+      const ATTRACT_MAX = 60;
+      const ATTRACT_STRENGTH = 0.03;
       const MOUSE_DIST = 180;
       const MOUSE_STRENGTH = 3.0;
       const DAMPING = 0.92;
