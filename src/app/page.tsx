@@ -11,17 +11,17 @@ const ParticleField = dynamic(() => import('@/components/ParticleField'), {
 // ——— Shared animation variants ———
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 14 },
+  hidden: { opacity: 0, y: 24 },
   visible: (delay: number = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.6, delay, ease: [0.25, 0.4, 0.25, 1] },
   }),
 };
 
 const stagger = {
   visible: {
-    transition: { staggerChildren: 0.06 },
+    transition: { staggerChildren: 0.08 },
   },
 };
 
@@ -31,9 +31,9 @@ function Nav() {
   return (
     <motion.nav
       className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-5 bg-background/80 backdrop-blur-md border-b border-white/[0.06]"
-      initial={{ opacity: 0, y: -10 }}
+      initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.5, delay: 0.1 }}
     >
       <a href="#" className="text-sm font-medium tracking-tight text-foreground">
         jonah duckworth
@@ -92,7 +92,7 @@ function Hero() {
           variants={fadeUp}
           initial="hidden"
           animate="visible"
-          custom={0.1}
+          custom={0.2}
         >
           <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
           <span className="text-sm font-mono text-muted">Calgary, AB</span>
@@ -103,7 +103,7 @@ function Hero() {
           variants={fadeUp}
           initial="hidden"
           animate="visible"
-          custom={0.2}
+          custom={0.3}
         >
           I build software
           <br />
@@ -115,7 +115,7 @@ function Hero() {
           variants={fadeUp}
           initial="hidden"
           animate="visible"
-          custom={0.3}
+          custom={0.45}
         >
           Developer and entrepreneur. Founded{' '}
           <a
@@ -143,7 +143,7 @@ function Hero() {
           variants={fadeUp}
           initial="hidden"
           animate="visible"
-          custom={0.4}
+          custom={0.6}
         >
           <a
             href="#work"
@@ -199,7 +199,7 @@ function SectionHeader({ label, title }: { label: string; title: string }) {
       variants={fadeUp}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: '-20px' }}
+      viewport={{ once: true, margin: '-80px' }}
       custom={0}
     >
       <span className="text-xs font-mono text-accent uppercase tracking-widest mb-3 block">
@@ -237,7 +237,7 @@ function VentureCard({ venture, index }: { venture: Venture; index: number }) {
       variants={fadeUp}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: '-30px' }}
+      viewport={{ once: true, margin: '-60px' }}
       custom={index * 0.1}
     >
       {venture.featured && (
@@ -386,7 +386,7 @@ function WorkCard({ item, index }: { item: WorkItem; index: number }) {
       variants={fadeUp}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, margin: '-30px' }}
+      viewport={{ once: true, margin: '-60px' }}
       custom={index * 0.1}
     >
       <div className="flex flex-col gap-4">
@@ -537,7 +537,7 @@ function TechStrip() {
         variants={stagger}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: '-20px' }}
+        viewport={{ once: true, margin: '-40px' }}
       >
         {categories.map((cat) => (
           <div key={cat.label} className="flex flex-col sm:flex-row sm:items-center gap-3">
@@ -624,7 +624,7 @@ function Speaking() {
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: '-20px' }}
+            viewport={{ once: true, margin: '-40px' }}
             custom={i * 0.08}
           >
             <div className="flex-1 min-w-0">
@@ -668,7 +668,7 @@ function Education() {
         variants={fadeUp}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: '-20px' }}
+        viewport={{ once: true, margin: '-40px' }}
         custom={0}
       >
         <div>
@@ -704,7 +704,7 @@ function Footer() {
         variants={fadeUp}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: '-20px' }}
+        viewport={{ once: true, margin: '-40px' }}
         custom={0}
       >
         <div>
