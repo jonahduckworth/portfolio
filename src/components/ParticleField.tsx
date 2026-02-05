@@ -8,52 +8,50 @@ const CODE_CHARS = ['{', '}', '<', '>', '/', '=', ';', '(', ')', '[', ']', '&', 
 // Normalized 0-1 coords, roughly equirectangular projection
 const LAND_REGIONS: [number, number, number, number][] = [
   // North America
-  [0.12, 0.15, 0.06, 0.06],  // Northern Canada
-  [0.16, 0.24, 0.06, 0.05],  // Southern Canada / Northern US
-  [0.18, 0.32, 0.05, 0.04],  // US
-  [0.14, 0.38, 0.025, 0.04], // Mexico
-  [0.06, 0.16, 0.025, 0.03], // Alaska
-  [0.30, 0.10, 0.025, 0.03], // Greenland
+  [0.12, 0.15, 0.06, 0.06],
+  [0.16, 0.24, 0.06, 0.05],
+  [0.18, 0.32, 0.05, 0.04],
+  [0.14, 0.38, 0.025, 0.04],
+  [0.06, 0.16, 0.025, 0.03],
+  [0.30, 0.10, 0.025, 0.03],
 
   // South America
-  [0.26, 0.48, 0.04, 0.04],   // Northern SA (Colombia/Venezuela)
-  [0.29, 0.56, 0.045, 0.05],  // Brazil
-  [0.26, 0.66, 0.025, 0.05],  // Argentina
-  [0.24, 0.74, 0.012, 0.03],  // Chile/Patagonia
+  [0.26, 0.48, 0.04, 0.04],
+  [0.29, 0.56, 0.045, 0.05],
+  [0.26, 0.66, 0.025, 0.05],
+  [0.24, 0.74, 0.012, 0.03],
 
   // Europe
-  [0.49, 0.20, 0.035, 0.05],  // Western Europe
-  [0.53, 0.14, 0.02, 0.04],   // Scandinavia
-  [0.46, 0.28, 0.02, 0.02],   // Iberian Peninsula
-  [0.53, 0.26, 0.02, 0.015],  // Italy/Balkans
+  [0.49, 0.20, 0.035, 0.05],
+  [0.53, 0.14, 0.02, 0.04],
+  [0.46, 0.28, 0.02, 0.02],
+  [0.53, 0.26, 0.02, 0.015],
 
   // Africa
-  [0.49, 0.36, 0.05, 0.04],   // North Africa
-  [0.50, 0.47, 0.04, 0.06],   // West/Central Africa
-  [0.53, 0.57, 0.025, 0.04],  // East Africa
-  [0.51, 0.65, 0.02, 0.025],  // Southern Africa
+  [0.49, 0.36, 0.05, 0.04],
+  [0.50, 0.47, 0.04, 0.06],
+  [0.53, 0.57, 0.025, 0.04],
+  [0.51, 0.65, 0.02, 0.025],
 
   // Asia
-  [0.62, 0.12, 0.08, 0.04],   // Russia West
-  [0.76, 0.12, 0.08, 0.04],   // Russia/Siberia East
-  [0.85, 0.14, 0.04, 0.03],   // Far East Russia
-  [0.61, 0.24, 0.06, 0.04],   // Central Asia / Middle East
-  [0.76, 0.24, 0.06, 0.05],   // China / Korea / Japan
-  [0.64, 0.35, 0.03, 0.05],   // India
-  [0.73, 0.37, 0.04, 0.03],   // SE Asia mainland
-  [0.58, 0.30, 0.025, 0.025], // Arabia
+  [0.62, 0.12, 0.08, 0.04],
+  [0.76, 0.12, 0.08, 0.04],
+  [0.85, 0.14, 0.04, 0.03],
+  [0.61, 0.24, 0.06, 0.04],
+  [0.76, 0.24, 0.06, 0.05],
+  [0.64, 0.35, 0.03, 0.05],
+  [0.73, 0.37, 0.04, 0.03],
+  [0.58, 0.30, 0.025, 0.025],
 
   // Oceania
-  [0.86, 0.63, 0.05, 0.035],  // Australia
-  [0.80, 0.42, 0.03, 0.012],  // Indonesia
-  [0.93, 0.71, 0.012, 0.015], // New Zealand
+  [0.86, 0.63, 0.05, 0.035],
+  [0.80, 0.42, 0.03, 0.012],
+  [0.93, 0.71, 0.012, 0.015],
 ];
 
 interface Particle {
   x: number;
   y: number;
-  homeX: number;
-  homeY: number;
   vx: number;
   vy: number;
   char: string;
@@ -79,14 +77,12 @@ function sampleFromRegions(W: number, H: number, count: number): Particle[] {
     offsetY = (H - mapH) / 2;
   }
 
-  // Weight regions by area for proportional sampling
   const areas = LAND_REGIONS.map(([, , rx, ry]) => Math.PI * rx * ry);
   const totalArea = areas.reduce((s, a) => s + a, 0);
 
   const particles: Particle[] = [];
 
   for (let i = 0; i < count; i++) {
-    // Pick region weighted by area
     let r = Math.random() * totalArea;
     let regionIdx = 0;
     for (let j = 0; j < areas.length; j++) {
@@ -99,7 +95,6 @@ function sampleFromRegions(W: number, H: number, count: number): Particle[] {
 
     const [cx, cy, rx, ry] = LAND_REGIONS[regionIdx];
 
-    // Uniform random point in ellipse
     const angle = Math.random() * Math.PI * 2;
     const rad = Math.sqrt(Math.random());
     const nx = cx + Math.cos(angle) * rx * rad;
@@ -111,12 +106,10 @@ function sampleFromRegions(W: number, H: number, count: number): Particle[] {
     particles.push({
       x: px,
       y: py,
-      homeX: px,
-      homeY: py,
-      vx: (Math.random() - 0.5) * 0.5,
-      vy: (Math.random() - 0.5) * 0.5,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
       char: CODE_CHARS[Math.floor(Math.random() * CODE_CHARS.length)],
-      alpha: 0.14 + Math.random() * 0.28,
+      alpha: 0.12 + Math.random() * 0.28,
       group: Math.floor(Math.random() * 4),
     });
   }
@@ -149,16 +142,14 @@ export default function ParticleField() {
       canvas.style.height = `${H}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      // Reinit particles with new dimensions
-      const count = Math.min(800, Math.max(300, Math.floor((W * H) / 1800)));
+      const count = Math.min(600, Math.max(200, Math.floor((W * H) / 2500)));
       particlesRef.current = sampleFromRegions(W, H, count);
     };
 
     handleResize();
     window.addEventListener('resize', handleResize);
 
-    // Spatial grid
-    const CELL_SIZE = 60;
+    const CELL_SIZE = 70;
 
     const animate = () => {
       const particles = particlesRef.current;
@@ -182,16 +173,15 @@ export default function ParticleField() {
         }
       }
 
-      // Physics params
-      const REPEL_DIST = 20;
-      const REPEL_STRENGTH = 0.5;
-      const ATTRACT_MIN = 20;
-      const ATTRACT_MAX = 42;
-      const ATTRACT_STRENGTH = 0.008;
-      const HOME_STRENGTH = 0.004;
-      const MOUSE_DIST = 200;
-      const MOUSE_STRENGTH = 4.5;
-      const DAMPING = 0.88;
+      // Original physics: short-range repulsion + medium-range attraction
+      const REPEL_DIST = 25;
+      const REPEL_STRENGTH = 0.6;
+      const ATTRACT_MIN = 25;
+      const ATTRACT_MAX = 55;
+      const ATTRACT_STRENGTH = 0.015;
+      const MOUSE_DIST = 180;
+      const MOUSE_STRENGTH = 3.0;
+      const DAMPING = 0.92;
 
       const mx = mouseRef.current.x;
       const my = mouseRef.current.y;
@@ -201,7 +191,6 @@ export default function ParticleField() {
         const col = Math.floor(p.x / CELL_SIZE);
         const row = Math.floor(p.y / CELL_SIZE);
 
-        // Neighbor interactions
         for (let dr = -1; dr <= 1; dr++) {
           for (let dc = -1; dc <= 1; dc++) {
             const nr = row + dr;
@@ -215,20 +204,19 @@ export default function ParticleField() {
               const dx = p.x - q.x;
               const dy = p.y - q.y;
               const dist = Math.sqrt(dx * dx + dy * dy);
+
               if (dist < 0.1) continue;
 
               let fx = 0;
               let fy = 0;
 
               if (dist < REPEL_DIST) {
-                // Short-range repulsion
                 const force = REPEL_STRENGTH * (1 - dist / REPEL_DIST);
                 fx = (dx / dist) * force;
                 fy = (dy / dist) * force;
               } else if (dist > ATTRACT_MIN && dist < ATTRACT_MAX) {
-                // Medium-range attraction (forms membrane/cell structures)
                 const t = (dist - ATTRACT_MIN) / (ATTRACT_MAX - ATTRACT_MIN);
-                const force = ATTRACT_STRENGTH * t;
+                const force = ATTRACT_STRENGTH * Math.max(0, t);
                 fx = -(dx / dist) * force;
                 fy = -(dy / dist) * force;
               }
@@ -243,12 +231,6 @@ export default function ParticleField() {
           }
         }
 
-        // Gentle spring toward home position (keeps map shape)
-        const hdx = p.homeX - p.x;
-        const hdy = p.homeY - p.y;
-        p.vx += hdx * HOME_STRENGTH;
-        p.vy += hdy * HOME_STRENGTH;
-
         // Mouse repulsion
         const mdx = p.x - mx;
         const mdy = p.y - my;
@@ -259,16 +241,17 @@ export default function ParticleField() {
           p.vy += (mdy / mDist) * mForce;
         }
 
-        // Boundary forces
-        const margin = 15;
-        if (p.x < margin) p.vx += 0.4;
-        if (p.x > W - margin) p.vx -= 0.4;
-        if (p.y < margin) p.vy += 0.4;
-        if (p.y > H - margin) p.vy -= 0.4;
+        // Soft boundary forces
+        const margin = 30;
+        const bForce = 0.3;
+        if (p.x < margin) p.vx += bForce * (1 - p.x / margin);
+        if (p.x > W - margin) p.vx -= bForce * (1 - (W - p.x) / margin);
+        if (p.y < margin) p.vy += bForce * (1 - p.y / margin);
+        if (p.y > H - margin) p.vy -= bForce * (1 - (H - p.y) / margin);
 
-        // Organic jitter
-        p.vx += (Math.random() - 0.5) * 0.15;
-        p.vy += (Math.random() - 0.5) * 0.15;
+        // Tiny organic jitter
+        p.vx += (Math.random() - 0.5) * 0.04;
+        p.vy += (Math.random() - 0.5) * 0.04;
 
         // Damping
         p.vx *= DAMPING;
@@ -276,9 +259,9 @@ export default function ParticleField() {
 
         // Speed limit
         const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
-        if (speed > 4) {
-          p.vx = (p.vx / speed) * 4;
-          p.vy = (p.vy / speed) * 4;
+        if (speed > 3) {
+          p.vx = (p.vx / speed) * 3;
+          p.vy = (p.vy / speed) * 3;
         }
 
         p.x += p.vx;
