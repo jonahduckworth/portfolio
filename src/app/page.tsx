@@ -224,7 +224,7 @@ interface Venture {
 function VentureCard({ venture }: { venture: Venture }) {
   const inner = (
     <motion.div
-      className={`group relative p-6 md:p-8 rounded-2xl border transition-all duration-300 ${
+      className={`group relative p-6 md:p-8 rounded-2xl border transition-[border-color,background-color] duration-300 ${
         venture.featured
           ? 'border-accent/30 bg-accent/[0.04] hover:border-accent/50 hover:bg-accent/[0.06]'
           : 'border-white/[0.10] bg-white/[0.03] hover:border-white/[0.18] hover:bg-white/[0.05]'
@@ -376,7 +376,7 @@ interface WorkItem {
 function WorkCard({ item }: { item: WorkItem }) {
   const inner = (
     <motion.div
-      className="group relative p-6 md:p-8 rounded-2xl border border-white/[0.10] bg-white/[0.03] hover:border-white/[0.18] hover:bg-white/[0.05] transition-all duration-300"
+      className="group relative p-6 md:p-8 rounded-2xl border border-white/[0.10] bg-white/[0.03] hover:border-white/[0.18] hover:bg-white/[0.05] transition-[border-color,background-color] duration-300"
       variants={fadeUp}
       initial="hidden"
       whileInView="visible"
@@ -612,7 +612,7 @@ function Speaking() {
             href={item.link}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 py-5 px-5 -mx-5 rounded-xl border border-transparent hover:border-white/[0.08] hover:bg-white/[0.03] transition-all duration-200"
+            className="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 py-5 px-5 -mx-5 rounded-xl border border-transparent hover:border-white/[0.08] hover:bg-white/[0.03] transition-[border-color,background-color] duration-200"
             variants={fadeUp}
             initial="hidden"
             whileInView="visible"
