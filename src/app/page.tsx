@@ -221,7 +221,7 @@ interface Venture {
   featured?: boolean;
 }
 
-function VentureCard({ venture, index }: { venture: Venture; index: number }) {
+function VentureCard({ venture }: { venture: Venture }) {
   const inner = (
     <motion.div
       className={`group relative p-6 md:p-8 rounded-2xl border transition-all duration-300 ${
@@ -352,8 +352,8 @@ function Ventures() {
     >
       <SectionHeader label="Ventures" title="Companies I founded" />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-        {ventures.map((venture, i) => (
-          <VentureCard key={venture.name} venture={venture} index={i} />
+        {ventures.map((venture) => (
+          <VentureCard key={venture.name} venture={venture} />
         ))}
       </div>
     </section>
@@ -373,7 +373,7 @@ interface WorkItem {
   link?: string;
 }
 
-function WorkCard({ item, index }: { item: WorkItem; index: number }) {
+function WorkCard({ item }: { item: WorkItem }) {
   const inner = (
     <motion.div
       className="group relative p-6 md:p-8 rounded-2xl border border-white/[0.10] bg-white/[0.03] hover:border-white/[0.18] hover:bg-white/[0.05] transition-all duration-300"
@@ -497,8 +497,8 @@ function Work() {
     <section id="work" className="px-6 md:px-12 lg:px-24 py-24 md:py-32">
       <SectionHeader label="Work" title="Consulting & roles" />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-        {workItems.map((item, i) => (
-          <WorkCard key={item.company} item={item} index={i} />
+        {workItems.map((item) => (
+          <WorkCard key={item.company} item={item} />
         ))}
       </div>
     </section>
@@ -538,7 +538,7 @@ function TechStrip() {
               {cat.label}
             </span>
             <div className="flex flex-wrap gap-2">
-              {cat.tools.map((tool, i) => (
+              {cat.tools.map((tool) => (
                 <motion.span
                   key={tool}
                   className="text-xs font-mono text-muted/65 px-3 py-1.5 rounded-full border border-white/[0.07] hover:border-white/[0.12] hover:text-muted transition-all duration-200"
