@@ -73,15 +73,15 @@ function sampleFromRegions(W: number, H: number, count: number): Particle[] {
 
   let mapW: number, mapH: number, offsetX: number, offsetY: number;
   if (viewAspect > mapAspect) {
-    mapH = H * 0.80;
+    mapH = H * 0.95;
     mapW = mapH * mapAspect;
     offsetX = (W - mapW) / 2;
-    offsetY = H * 0.12;
+    offsetY = H * 0.03;
   } else {
-    mapW = W * 0.90;
+    mapW = W * 0.96;
     mapH = mapW / mapAspect;
-    offsetX = W * 0.05;
-    offsetY = (H - mapH) / 2 + H * 0.06;
+    offsetX = W * 0.02;
+    offsetY = (H - mapH) / 2;
   }
 
   const areas = LAND_REGIONS.map(([, , rx, ry]) => Math.PI * rx * ry);
@@ -149,7 +149,7 @@ export default function ParticleField() {
       canvas.style.height = `${H}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      const count = Math.min(800, Math.max(250, Math.floor((W * H) / 2000)));
+      const count = Math.min(1000, Math.max(300, Math.floor((W * H) / 1600)));
       particlesRef.current = sampleFromRegions(W, H, count);
     };
 
