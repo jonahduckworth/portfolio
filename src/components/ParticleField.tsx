@@ -150,17 +150,8 @@ export default function ParticleField() {
     window.addEventListener('resize', handleResize);
 
     const CELL_SIZE = 70;
-    const startTime = performance.now();
-    // Physics ramps up over 4 seconds after a 2-second static hold
-    const HOLD_MS = 2000;
-    const RAMP_MS = 3000;
 
     const animate = () => {
-      const elapsed = performance.now() - startTime;
-      // 0 during hold, ramps 0→1 over RAMP_MS after hold
-      const physicsStrength = elapsed < HOLD_MS
-        ? 0
-        : Math.min(1, (elapsed - HOLD_MS) / RAMP_MS);
       const particles = particlesRef.current;
       if (particles.length === 0) {
         animRef.current = requestAnimationFrame(animate);
@@ -220,12 +211,12 @@ export default function ParticleField() {
               let fy = 0;
 
               if (dist < REPEL_DIST) {
-                const force = REPEL_STRENGTH * (1 - dist / REPEL_DIST) * physicsStrength;
+                const force = REPEL_STRENGTH * (1 - dist / REPEL_DIST);
                 fx = (dx / dist) * force;
                 fy = (dy / dist) * force;
               } else if (dist > ATTRACT_MIN && dist < ATTRACT_MAX) {
                 const t = (dist - ATTRACT_MIN) / (ATTRACT_MAX - ATTRACT_MIN);
-                const force = ATTRACT_STRENGTH * Math.max(0, t) * physicsStrength;
+                const force = ATTRACT_STRENGTH * Math.max(0, t);
                 fx = -(dx / dist) * force;
                 fy = -(dy / dist) * force;
               }
@@ -240,7 +231,7 @@ export default function ParticleField() {
           }
         }
 
-        // Mouse repulsion (always active for interactivity even during hold)
+        // Mouse repulsion
         const mdx = p.x - mx;
         const mdy = p.y - my;
         const mDist = Math.sqrt(mdx * mdx + mdy * mdy);
@@ -258,9 +249,9 @@ export default function ParticleField() {
         if (p.y < margin) p.vy += bForce * (1 - p.y / margin);
         if (p.y > H - margin) p.vy -= bForce * (1 - (H - p.y) / margin);
 
-        // Tiny organic jitter (scales with physics)
-        p.vx += (Math.random() - 0.5) * 0.04 * physicsStrength;
-        p.vy += (Math.random() - 0.5) * 0.04 * physicsStrength;
+        // Tiny organic jitter
+        p.vx += (Math.random() - 0.5) * 0.04;
+        p.vy += (Math.random() - 0.5) * 0.04;
 
         // Damping
         p.vx *= DAMPING;
