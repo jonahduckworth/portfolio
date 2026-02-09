@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'motion/react';
 import { useRef } from 'react';
 import dynamic from 'next/dynamic';
 
@@ -15,7 +15,7 @@ const fadeUp = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.4, 0.25, 1] },
+    transition: { duration: 0.6, ease: [0.25, 0.4, 0.25, 1] as [number, number, number, number] },
   },
 };
 
@@ -91,7 +91,7 @@ function Hero() {
           className="flex items-center gap-3 mb-8"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
+          transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] as [number, number, number, number] }}
         >
           <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
           <span className="text-sm font-mono text-muted">Calgary, AB</span>
@@ -101,7 +101,7 @@ function Hero() {
           className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.08] mb-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
+          transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.4, 0.25, 1] as [number, number, number, number] }}
         >
           I build software
           <br />
@@ -112,7 +112,7 @@ function Hero() {
           className="text-lg md:text-xl text-muted max-w-xl leading-relaxed mb-10"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.45, ease: [0.25, 0.4, 0.25, 1] }}
+          transition={{ duration: 0.6, delay: 0.45, ease: [0.25, 0.4, 0.25, 1] as [number, number, number, number] }}
         >
           Developer and entrepreneur. Founded{' '}
           <a
@@ -139,7 +139,7 @@ function Hero() {
           className="flex flex-wrap gap-3"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6, ease: [0.25, 0.4, 0.25, 1] }}
+          transition={{ duration: 0.6, delay: 0.6, ease: [0.25, 0.4, 0.25, 1] as [number, number, number, number] }}
         >
           <a
             href="#work"

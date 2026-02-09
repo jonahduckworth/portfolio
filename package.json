@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "framer-motion": "^11.11.15",
+    "motion": "^12.34.0",
     "next": "^15.5.12",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
@@ -21,8 +21,8 @@
   },
   "devDependencies": {
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "^19.2.13",
+    "@types/react-dom": "^19.2.3",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "postcss": "^8",
