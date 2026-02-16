@@ -1,15 +1,6 @@
-@import "tailwindcss";
-
-@theme {
-  --color-background: #050505;
-  --color-foreground: #e5e5e5;
-  --color-accent: #f97316;
-  --color-muted: #737373;
-  --color-border: #1a1a1a;
-  --color-card: #0a0a0a;
-  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
-  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
   --background: #0a0a0b;
