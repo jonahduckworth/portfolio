@@ -30,12 +30,13 @@ const stagger = {
 function Nav() {
   return (
     <motion.nav
+      aria-label="Main navigation"
       className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-12 py-3.5 sm:py-5 bg-background/80 backdrop-blur-md border-b border-white/[0.06]"
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 }}
     >
-      <a href="#" className="text-xs sm:text-sm font-medium tracking-tight text-foreground">
+      <a href="#" aria-label="Home" className="text-xs sm:text-sm font-medium tracking-tight text-foreground">
         jonah duckworth
       </a>
       <div className="flex items-center gap-3 sm:gap-6">
@@ -147,6 +148,7 @@ function Hero() {
           >
             See my work
             <svg
+              aria-hidden="true"
               width="14"
               height="14"
               viewBox="0 0 24 24"
@@ -171,6 +173,7 @@ function Hero() {
 
       {/* Scroll indicator */}
       <motion.div
+        aria-hidden="true"
         className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -254,6 +257,7 @@ function VentureCard({ venture }: { venture: Venture }) {
             </h3>
             {venture.link && (
               <svg
+                aria-hidden="true"
                 className="w-4 h-4 text-muted group-hover:text-foreground transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                 viewBox="0 0 24 24"
                 fill="none"
@@ -301,7 +305,7 @@ function VentureCard({ venture }: { venture: Venture }) {
 
   if (venture.link) {
     return (
-      <a href={venture.link} target="_blank" rel="noopener noreferrer" className="block">
+      <a href={venture.link} target="_blank" rel="noopener noreferrer" aria-label={`${venture.name} (opens in new tab)`} className="block">
         {inner}
       </a>
     );
@@ -390,6 +394,7 @@ function WorkCard({ item }: { item: WorkItem }) {
             </h3>
             {item.link && (
               <svg
+                aria-hidden="true"
                 className="w-4 h-4 text-muted group-hover:text-foreground transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                 viewBox="0 0 24 24"
                 fill="none"
@@ -437,7 +442,7 @@ function WorkCard({ item }: { item: WorkItem }) {
 
   if (item.link) {
     return (
-      <a href={item.link} target="_blank" rel="noopener noreferrer" className="block">
+      <a href={item.link} target="_blank" rel="noopener noreferrer" aria-label={`${item.company} (opens in new tab)`} className="block">
         {inner}
       </a>
     );
@@ -612,6 +617,7 @@ function Speaking() {
             href={item.link}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={`${item.title} — ${item.context} (opens in new tab)`}
             className="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 py-5 px-5 -mx-5 rounded-xl border border-transparent hover:border-white/[0.08] hover:bg-white/[0.03] transition-[border-color,background-color] duration-200"
             variants={fadeUp}
             initial="hidden"
@@ -624,6 +630,7 @@ function Speaking() {
                   {item.title}
                 </h3>
                 <svg
+                  aria-hidden="true"
                   className="w-3.5 h-3.5 text-muted/55 group-hover:text-accent flex-shrink-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                   viewBox="0 0 24 24"
                   fill="none"
@@ -716,6 +723,7 @@ function Footer() {
               href={link.href}
               target={link.href.startsWith('mailto') ? undefined : '_blank'}
               rel="noopener noreferrer"
+              aria-label={link.href.startsWith('mailto') ? `Email Jonah Duckworth` : `${link.label} (opens in new tab)`}
               className="text-sm text-muted hover:text-foreground transition-colors duration-200 underline decoration-white/10 underline-offset-4 hover:decoration-accent/50"
             >
               {link.label}
