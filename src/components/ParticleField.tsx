@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 const CODE_CHARS = ['{', '}', '<', '>', '/', '=', ';', '(', ')', '[', ']', '&', '|', '+', '*', '0', '1', '_', ':', '#'];
 
@@ -158,25 +158,14 @@ export default function ParticleField() {
   const mouseRef = useRef({ x: -9999, y: -9999 });
   const particlesRef = useRef<Particle[]>([]);
   const animRef = useRef<number>(0);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() =>
+  // Track reduced-motion preference in a ref so the single setup effect
+  // never needs to re-run; the MQL change handler updates the ref and
+  // imperatively starts/stops the RAF loop live.
+  const prefersReducedMotionRef = useRef(
     typeof window !== 'undefined'
       ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
       : false
   );
-  // Mirror state in a ref so the canvas effect's closures always see the
-  // latest value without needing to re-run the whole effect.
-  const prefersReducedMotionRef = useRef(prefersReducedMotion);
-  useEffect(() => {
-    prefersReducedMotionRef.current = prefersReducedMotion;
-  }, [prefersReducedMotion]);
-
-  useEffect(() => {
-    const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
-    setPrefersReducedMotion(mql.matches);
-    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
-    mql.addEventListener('change', handler);
-    return () => mql.removeEventListener('change', handler);
-  }, [prefersReducedMotion]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -228,14 +217,6 @@ export default function ParticleField() {
 
     handleResize();
     window.addEventListener('resize', handleResize);
-
-    // Reduced motion: draw a single static frame and stop
-    if (prefersReducedMotionRef.current) {
-      drawStaticFrame();
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }
 
     const CELL_SIZE = 70;
 
@@ -387,7 +368,33 @@ export default function ParticleField() {
       animRef.current = requestAnimationFrame(animate);
     };
 
-    animRef.current = requestAnimationFrame(animate);
+    // Imperatively handle live OS reduced-motion preference changes.
+    // Updating the ref and calling start/stop here means the single setup
+    // effect (with [] deps) never needs to re-run — no full teardown /
+    // re-initialisation on every toggle.
+    const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    // Sync ref with real current state (handles SSR initial-value mismatch)
+    prefersReducedMotionRef.current = mql.matches;
+
+    const handleMotionChange = (e: MediaQueryListEvent) => {
+      prefersReducedMotionRef.current = e.matches;
+      if (e.matches) {
+        // User turned on reduced motion: stop the RAF loop, draw one static frame
+        cancelAnimationFrame(animRef.current);
+        drawStaticFrame();
+      } else {
+        // User turned off reduced motion: resume the animation loop
+        animRef.current = requestAnimationFrame(animate);
+      }
+    };
+    mql.addEventListener('change', handleMotionChange);
+
+    // Initial start — static frame or live animation
+    if (prefersReducedMotionRef.current) {
+      drawStaticFrame();
+    } else {
+      animRef.current = requestAnimationFrame(animate);
+    }
 
     const handleMouseMove = (e: MouseEvent) => {
       mouseRef.current = { x: e.clientX, y: e.clientY };
@@ -411,13 +418,14 @@ export default function ParticleField() {
 
     return () => {
       cancelAnimationFrame(animRef.current);
+      mql.removeEventListener('change', handleMotionChange);
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [prefersReducedMotion]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps -- intentionally runs once; reduced-motion changes are handled imperatively via MQL listener
 
   return (
     <canvas
