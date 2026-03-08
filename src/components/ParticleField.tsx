@@ -363,16 +363,25 @@ export default function ParticleField() {
       }
     };
 
+    // Re-draw the static frame whenever viewport resizes in reduced-motion mode
+    const handleReducedMotionResize = () => {
+      handleResize();
+      drawStaticFrame();
+    };
+
     const stopAnimation = () => {
       cancelAnimationFrame(animRef.current);
       animRef.current = 0;
       window.removeEventListener('resize', handleResize);
-      // Draw a single static frame so reduced-motion users still see the background
+      // Switch to reduced-motion resize handler so canvas stays correctly sized
+      window.addEventListener('resize', handleReducedMotionResize);
+      handleResize();
       drawStaticFrame();
     };
 
     const startAnimation = () => {
       if (animRef.current) return; // already running
+      window.removeEventListener('resize', handleReducedMotionResize);
       handleResize();
       window.addEventListener('resize', handleResize);
       animRef.current = requestAnimationFrame(animate);
@@ -389,11 +398,15 @@ export default function ParticleField() {
     };
     mq.addEventListener('change', handleMotionChange);
 
-    // Initial setup: animate or draw a single static frame for reduced-motion users
+    // Initial setup
     if (!mq.matches) {
       startAnimation();
     } else {
+      // Reduced-motion: draw static frame and keep resize handler so canvas
+      // dimensions stay correct after viewport changes / orientation change
+      handleResize();
       drawStaticFrame();
+      window.addEventListener('resize', handleReducedMotionResize);
     }
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -420,6 +433,7 @@ export default function ParticleField() {
       cancelAnimationFrame(animRef.current);
       mq.removeEventListener('change', handleMotionChange);
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', handleReducedMotionResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
       window.removeEventListener('touchmove', handleTouchMove);
