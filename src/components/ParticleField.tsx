@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const CODE_CHARS = ['{', '}', '<', '>', '/', '=', ';', '(', ')', '[', ']', '&', '|', '+', '*', '0', '1', '_', ':', '#'];
 
@@ -158,6 +158,15 @@ export default function ParticleField() {
   const mouseRef = useRef({ x: -9999, y: -9999 });
   const particlesRef = useRef<Particle[]>([]);
   const animRef = useRef<number>(0);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -187,6 +196,29 @@ export default function ParticleField() {
 
     handleResize();
     window.addEventListener('resize', handleResize);
+
+    // Reduced motion: draw a single static frame and stop
+    if (prefersReducedMotion) {
+      const particles = particlesRef.current;
+      ctx.clearRect(0, 0, W, H);
+      const fontSize = W < 640 ? 7 : 10;
+      ctx.font = `${fontSize}px "Geist Mono", ui-monospace, monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        switch (p.group) {
+          case 0: ctx.fillStyle = `rgba(249, 115, 22, ${p.alpha * 0.9})`; break;
+          case 1: ctx.fillStyle = `rgba(245, 235, 220, ${p.alpha * 0.65})`; break;
+          case 2: ctx.fillStyle = `rgba(170, 170, 190, ${p.alpha * 0.5})`; break;
+          default: ctx.fillStyle = `rgba(140, 140, 160, ${p.alpha * 0.4})`; break;
+        }
+        ctx.fillText(p.char, p.x, p.y);
+      }
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
 
     const CELL_SIZE = 70;
 
@@ -368,7 +400,7 @@ export default function ParticleField() {
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <canvas

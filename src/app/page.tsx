@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, useScroll, useTransform } from 'motion/react';
+import { motion, MotionConfig, useScroll, useTransform } from 'motion/react';
 import { useRef } from 'react';
 import dynamic from 'next/dynamic';
 
@@ -94,7 +94,7 @@ function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] as [number, number, number, number] }}
         >
-          <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+          <div className="w-2 h-2 rounded-full bg-accent motion-safe:animate-pulse" />
           <span className="text-sm font-mono text-muted">Calgary, AB</span>
         </motion.div>
 
@@ -749,6 +749,7 @@ function Footer() {
 
 export default function Page() {
   return (
+    <MotionConfig reducedMotion="user">
     <main className="relative">
       <ParticleField />
       <Nav />
@@ -760,5 +761,6 @@ export default function Page() {
       <Education />
       <Footer />
     </main>
+    </MotionConfig>
   );
 }
