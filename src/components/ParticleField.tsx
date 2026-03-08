@@ -181,28 +181,7 @@ export default function ParticleField() {
     let W = 0;
     let H = 0;
 
-    const handleResize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      W = window.innerWidth;
-      H = window.innerHeight;
-      canvas.width = W * dpr;
-      canvas.height = H * dpr;
-      canvas.style.width = `${W}px`;
-      canvas.style.height = `${H}px`;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-      // More particles on mobile for denser map
-      const isMobile = W < 640;
-      const divisor = isMobile ? 600 : 1600;
-      const count = Math.min(1000, Math.max(400, Math.floor((W * H) / divisor)));
-      particlesRef.current = sampleFromRegions(W, H, count);
-    };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
-
-    // Reduced motion: draw a single static frame and stop
-    if (prefersReducedMotion) {
+    const drawStaticFrame = () => {
       const particles = particlesRef.current;
       ctx.clearRect(0, 0, W, H);
       const fontSize = W < 640 ? 7 : 10;
@@ -219,6 +198,34 @@ export default function ParticleField() {
         }
         ctx.fillText(p.char, p.x, p.y);
       }
+    };
+
+    const handleResize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = window.innerWidth;
+      H = window.innerHeight;
+      canvas.width = W * dpr;
+      canvas.height = H * dpr;
+      canvas.style.width = `${W}px`;
+      canvas.style.height = `${H}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      // More particles on mobile for denser map
+      const isMobile = W < 640;
+      const divisor = isMobile ? 600 : 1600;
+      const count = Math.min(1000, Math.max(400, Math.floor((W * H) / divisor)));
+      particlesRef.current = sampleFromRegions(W, H, count);
+
+      // In reduced-motion mode, redraw static frame after resize clears the canvas
+      if (prefersReducedMotion) drawStaticFrame();
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    // Reduced motion: draw a single static frame and stop
+    if (prefersReducedMotion) {
+      drawStaticFrame();
       return () => {
         window.removeEventListener('resize', handleResize);
       };
