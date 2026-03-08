@@ -176,7 +176,7 @@ export default function ParticleField() {
     const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
     mql.addEventListener('change', handler);
     return () => mql.removeEventListener('change', handler);
-  }, []);
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -417,7 +417,7 @@ export default function ParticleField() {
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
     };
-  }, []);
+  }, [prefersReducedMotion]);
 
   return (
     <canvas
