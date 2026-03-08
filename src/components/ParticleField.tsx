@@ -158,14 +158,6 @@ export default function ParticleField() {
   const mouseRef = useRef({ x: -9999, y: -9999 });
   const particlesRef = useRef<Particle[]>([]);
   const animRef = useRef<number>(0);
-  // Track reduced-motion preference in a ref so the single setup effect
-  // never needs to re-run; the MQL change handler updates the ref and
-  // imperatively starts/stops the RAF loop live.
-  const prefersReducedMotionRef = useRef(
-    typeof window !== 'undefined'
-      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      : false
-  );
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -175,25 +167,6 @@ export default function ParticleField() {
 
     let W = 0;
     let H = 0;
-
-    const drawStaticFrame = () => {
-      const particles = particlesRef.current;
-      ctx.clearRect(0, 0, W, H);
-      const fontSize = W < 640 ? 7 : 10;
-      ctx.font = `${fontSize}px "Geist Mono", ui-monospace, monospace`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      for (let i = 0; i < particles.length; i++) {
-        const p = particles[i];
-        switch (p.group) {
-          case 0: ctx.fillStyle = `rgba(249, 115, 22, ${p.alpha * 0.9})`; break;
-          case 1: ctx.fillStyle = `rgba(245, 235, 220, ${p.alpha * 0.65})`; break;
-          case 2: ctx.fillStyle = `rgba(170, 170, 190, ${p.alpha * 0.5})`; break;
-          default: ctx.fillStyle = `rgba(140, 140, 160, ${p.alpha * 0.4})`; break;
-        }
-        ctx.fillText(p.char, p.x, p.y);
-      }
-    };
 
     const handleResize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -210,13 +183,7 @@ export default function ParticleField() {
       const divisor = isMobile ? 600 : 1600;
       const count = Math.min(1000, Math.max(400, Math.floor((W * H) / divisor)));
       particlesRef.current = sampleFromRegions(W, H, count);
-
-      // In reduced-motion mode, redraw static frame after resize clears the canvas
-      if (prefersReducedMotionRef.current) drawStaticFrame();
     };
-
-    handleResize();
-    window.addEventListener('resize', handleResize);
 
     const CELL_SIZE = 70;
 
@@ -368,31 +335,33 @@ export default function ParticleField() {
       animRef.current = requestAnimationFrame(animate);
     };
 
-    // Imperatively handle live OS reduced-motion preference changes.
-    // Updating the ref and calling start/stop here means the single setup
-    // effect (with [] deps) never needs to re-run — no full teardown /
-    // re-initialisation on every toggle.
-    const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
-    // Sync ref with real current state (handles SSR initial-value mismatch)
-    prefersReducedMotionRef.current = mql.matches;
+    const stopAnimation = () => {
+      cancelAnimationFrame(animRef.current);
+      animRef.current = 0;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    };
 
+    const startAnimation = () => {
+      if (animRef.current) return; // already running
+      handleResize();
+      animRef.current = requestAnimationFrame(animate);
+    };
+
+    // Respond to live prefers-reduced-motion changes
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
     const handleMotionChange = (e: MediaQueryListEvent) => {
-      prefersReducedMotionRef.current = e.matches;
       if (e.matches) {
-        // User turned on reduced motion: stop the RAF loop, draw one static frame
-        cancelAnimationFrame(animRef.current);
-        drawStaticFrame();
+        stopAnimation();
       } else {
-        // User turned off reduced motion: resume the animation loop
-        animRef.current = requestAnimationFrame(animate);
+        startAnimation();
       }
     };
-    mql.addEventListener('change', handleMotionChange);
+    mq.addEventListener('change', handleMotionChange);
 
-    // Initial start — static frame or live animation
-    if (prefersReducedMotionRef.current) {
-      drawStaticFrame();
-    } else {
+    // Initial setup: only start if motion is allowed
+    if (!mq.matches) {
+      handleResize();
+      window.addEventListener('resize', handleResize);
       animRef.current = requestAnimationFrame(animate);
     }
 
@@ -418,14 +387,14 @@ export default function ParticleField() {
 
     return () => {
       cancelAnimationFrame(animRef.current);
-      mql.removeEventListener('change', handleMotionChange);
+      mq.removeEventListener('change', handleMotionChange);
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps -- intentionally runs once; reduced-motion changes are handled imperatively via MQL listener
+  }, []);
 
   return (
     <canvas
