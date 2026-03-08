@@ -158,7 +158,11 @@ export default function ParticleField() {
   const mouseRef = useRef({ x: -9999, y: -9999 });
   const particlesRef = useRef<Particle[]>([]);
   const animRef = useRef<number>(0);
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(() =>
+    typeof window !== 'undefined'
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false
+  );
 
   useEffect(() => {
     const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -166,7 +170,7 @@ export default function ParticleField() {
     const handler = (e: MediaQueryListEvent) => setPrefersReducedMotion(e.matches);
     mql.addEventListener('change', handler);
     return () => mql.removeEventListener('change', handler);
-  }, [prefersReducedMotion]);
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -400,7 +404,7 @@ export default function ParticleField() {
       window.removeEventListener('touchmove', handleTouchMove);
       window.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [prefersReducedMotion]);
+  }, []);
 
   return (
     <canvas
