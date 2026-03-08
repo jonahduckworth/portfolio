@@ -335,15 +335,51 @@ export default function ParticleField() {
       animRef.current = requestAnimationFrame(animate);
     };
 
+    const drawStaticFrame = () => {
+      ctx.clearRect(0, 0, W, H);
+      const fontSize = W < 640 ? 7 : 10;
+      ctx.font = `${fontSize}px "Geist Mono", ui-monospace, monospace`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const particles = particlesRef.current;
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        switch (p.group) {
+          case 0:
+            ctx.fillStyle = `rgba(249, 115, 22, ${p.alpha * 0.9})`;
+            break;
+          case 1:
+            ctx.fillStyle = `rgba(245, 235, 220, ${p.alpha * 0.65})`;
+            break;
+          case 2:
+            ctx.fillStyle = `rgba(170, 170, 190, ${p.alpha * 0.5})`;
+            break;
+          default:
+            ctx.fillStyle = `rgba(140, 140, 160, ${p.alpha * 0.4})`;
+            break;
+        }
+        ctx.fillText(p.char, p.x, p.y);
+      }
+    };
+
+    const handleReducedMotionResize = () => {
+      handleResize();
+      drawStaticFrame();
+    };
+
     const stopAnimation = () => {
       cancelAnimationFrame(animRef.current);
       animRef.current = 0;
       window.removeEventListener('resize', handleResize);
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Switch to reduced-motion static resize handler so canvas stays correctly sized
+      window.addEventListener('resize', handleReducedMotionResize);
+      handleResize();
+      drawStaticFrame();
     };
 
     const startAnimation = () => {
       if (animRef.current) return; // already running
+      window.removeEventListener('resize', handleReducedMotionResize);
       handleResize();
       window.addEventListener('resize', handleResize);
       animRef.current = requestAnimationFrame(animate);
@@ -360,9 +396,15 @@ export default function ParticleField() {
     };
     mq.addEventListener('change', handleMotionChange);
 
-    // Initial setup: only start if motion is allowed
+    // Initial setup
     if (!mq.matches) {
       startAnimation();
+    } else {
+      // Reduced-motion: draw one static frame and keep a resize listener active
+      // so canvas dimensions stay correct after viewport changes
+      handleResize();
+      drawStaticFrame();
+      window.addEventListener('resize', handleReducedMotionResize);
     }
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -389,6 +431,7 @@ export default function ParticleField() {
       cancelAnimationFrame(animRef.current);
       mq.removeEventListener('change', handleMotionChange);
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', handleReducedMotionResize);
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseleave', handleMouseLeave);
       window.removeEventListener('touchmove', handleTouchMove);
