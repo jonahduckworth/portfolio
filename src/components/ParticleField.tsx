@@ -163,6 +163,12 @@ export default function ParticleField() {
       ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
       : false
   );
+  // Mirror state in a ref so the canvas effect's closures always see the
+  // latest value without needing to re-run the whole effect.
+  const prefersReducedMotionRef = useRef(prefersReducedMotion);
+  useEffect(() => {
+    prefersReducedMotionRef.current = prefersReducedMotion;
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
     const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -217,14 +223,14 @@ export default function ParticleField() {
       particlesRef.current = sampleFromRegions(W, H, count);
 
       // In reduced-motion mode, redraw static frame after resize clears the canvas
-      if (prefersReducedMotion) drawStaticFrame();
+      if (prefersReducedMotionRef.current) drawStaticFrame();
     };
 
     handleResize();
     window.addEventListener('resize', handleResize);
 
     // Reduced motion: draw a single static frame and stop
-    if (prefersReducedMotion) {
+    if (prefersReducedMotionRef.current) {
       drawStaticFrame();
       return () => {
         window.removeEventListener('resize', handleResize);
