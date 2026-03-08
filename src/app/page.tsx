@@ -1,6 +1,6 @@
 'use client';
 
-import { motion, MotionConfig, useScroll, useTransform } from 'motion/react';
+import { motion, MotionConfig, useReducedMotion, useScroll, useTransform } from 'motion/react';
 import { useRef } from 'react';
 import dynamic from 'next/dynamic';
 
@@ -79,12 +79,13 @@ function Hero() {
   });
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const y = useTransform(scrollYProgress, [0, 0.5], [0, -60]);
+  const shouldReduceMotion = useReducedMotion();
 
   return (
     <motion.section
       ref={ref}
       className="relative min-h-[100svh] flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-20"
-      style={{ opacity, y }}
+      style={{ opacity, y: shouldReduceMotion ? 0 : y }}
     >
 
       <div className="relative z-10 max-w-3xl">
