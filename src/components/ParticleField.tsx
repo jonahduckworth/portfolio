@@ -338,12 +338,14 @@ export default function ParticleField() {
     const stopAnimation = () => {
       cancelAnimationFrame(animRef.current);
       animRef.current = 0;
+      window.removeEventListener('resize', handleResize);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     };
 
     const startAnimation = () => {
       if (animRef.current) return; // already running
       handleResize();
+      window.addEventListener('resize', handleResize);
       animRef.current = requestAnimationFrame(animate);
     };
 
@@ -360,9 +362,7 @@ export default function ParticleField() {
 
     // Initial setup: only start if motion is allowed
     if (!mq.matches) {
-      handleResize();
-      window.addEventListener('resize', handleResize);
-      animRef.current = requestAnimationFrame(animate);
+      startAnimation();
     }
 
     const handleMouseMove = (e: MouseEvent) => {
