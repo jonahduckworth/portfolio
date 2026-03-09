@@ -1,213 +1,23 @@
-'use client';
-
-import { motion, MotionConfig, useReducedMotion, useScroll, useTransform } from 'motion/react';
-import { useRef } from 'react';
-import dynamic from 'next/dynamic';
-
-const ParticleField = dynamic(() => import('@/components/ParticleField'), {
-  ssr: false,
-});
-
-// ——— Shared animation variants ———
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: [0.25, 0.4, 0.25, 1] as [number, number, number, number] },
-  },
-};
-
-const stagger = {
-  visible: {
-    transition: { staggerChildren: 0.08 },
-  },
-};
-
-// ——— Nav ———
-
-function Nav() {
-  return (
-    <motion.nav
-      aria-label="Main navigation"
-      className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 sm:px-6 md:px-12 py-3.5 sm:py-5 bg-background/80 backdrop-blur-md border-b border-white/[0.06]"
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.1 }}
-    >
-      <a href="#" aria-label="Home" className="text-xs sm:text-sm font-medium tracking-tight text-foreground">
-        jonah duckworth
-      </a>
-      <div className="flex items-center gap-3 sm:gap-6">
-        <a
-          href="#work"
-          className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors duration-200"
-        >
-          work
-        </a>
-        <a
-          href="#ventures"
-          className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors duration-200"
-        >
-          ventures
-        </a>
-        <a
-          href="#speaking"
-          className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors duration-200"
-        >
-          speaking
-        </a>
-        <a
-          href="#contact"
-          className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors duration-200"
-        >
-          contact
-        </a>
-      </div>
-    </motion.nav>
-  );
-}
-
-// ——— Hero ———
-
-function Hero() {
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start start', 'end start'],
-  });
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const y = useTransform(scrollYProgress, [0, 0.5], [0, -60]);
-  const shouldReduceMotion = useReducedMotion();
-
-  return (
-    <motion.section
-      ref={ref}
-      className="relative min-h-[100svh] flex flex-col justify-center px-6 md:px-12 lg:px-24 pt-20"
-      style={{ opacity, y: shouldReduceMotion ? 0 : y }}
-    >
-
-      <div className="relative z-10 max-w-3xl">
-        <motion.div
-          className="flex items-center gap-3 mb-8"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] as [number, number, number, number] }}
-        >
-          <div className="w-2 h-2 rounded-full bg-accent motion-safe:animate-pulse" />
-          <span className="text-sm font-mono text-muted">Calgary, AB</span>
-        </motion.div>
-
-        <motion.h1
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight leading-[1.08] mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.4, 0.25, 1] as [number, number, number, number] }}
-        >
-          I build software
-          <br />
-          <span className="text-accent">from zero to real.</span>
-        </motion.h1>
-
-        <motion.p
-          className="text-lg md:text-xl text-muted max-w-xl leading-relaxed mb-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.45, ease: [0.25, 0.4, 0.25, 1] as [number, number, number, number] }}
-        >
-          Developer and entrepreneur. Founded{' '}
-          <a
-            href="https://refbuddy.ca"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-foreground hover:text-accent transition-colors duration-200 underline decoration-white/20 underline-offset-4 hover:decoration-accent/50"
-          >
-            Ref Buddy
-          </a>{' '}
-          and{' '}
-          <a
-            href="https://harvestingpro.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-foreground hover:text-accent transition-colors duration-200 underline decoration-white/20 underline-offset-4 hover:decoration-accent/50"
-          >
-            HarvestingPro
-          </a>
-          . I turn manual processes into software that scales.
-        </motion.p>
-
-        <motion.div
-          className="flex flex-wrap gap-3"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6, ease: [0.25, 0.4, 0.25, 1] as [number, number, number, number] }}
-        >
-          <a
-            href="#work"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-foreground text-background text-sm font-medium rounded-full hover:bg-accent hover:text-white transition-all duration-200"
-          >
-            See my work
-            <svg
-              aria-hidden="true"
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="m6 17 5-5-5-5" />
-              <path d="m13 17 5-5-5-5" />
-            </svg>
-          </a>
-          <a
-            href="mailto:jonah@jdbuilds.ca"
-            className="inline-flex items-center px-5 py-2.5 border border-white/10 text-sm text-muted hover:text-foreground hover:border-white/25 rounded-full transition-all duration-200"
-          >
-            Get in touch
-          </a>
-        </motion.div>
-      </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        aria-hidden="true"
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-      >
-        <motion.div
-          className="w-[1px] h-8 bg-gradient-to-b from-transparent via-muted to-transparent"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </motion.div>
-    </motion.section>
-  );
-}
+import { MotionProvider } from '@/components/MotionProvider';
+import { AnimatedNav } from '@/components/AnimatedNav';
+import { HeroSection } from '@/components/HeroSection';
+import { AnimatedSection } from '@/components/AnimatedSection';
+import { AnimatedTechStrip } from '@/components/AnimatedTechStrip';
+import { AnimatedSpeakingItem } from '@/components/AnimatedSpeakingItem';
+import { ParticleFieldWrapper } from '@/components/ParticleFieldWrapper';
 
 // ——— Section header ———
 
 function SectionHeader({ label, title }: { label: string; title: string }) {
   return (
-    <motion.div
-      className="mb-12 md:mb-16"
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-80px' }}
-    >
+    <AnimatedSection className="mb-12 md:mb-16">
       <span className="text-xs font-mono text-accent uppercase tracking-widest mb-3 block">
         {label}
       </span>
       <h2 className="text-2xl md:text-3xl font-semibold tracking-tight">
         {title}
       </h2>
-    </motion.div>
+    </AnimatedSection>
   );
 }
 
@@ -227,16 +37,12 @@ interface Venture {
 
 function VentureCard({ venture }: { venture: Venture }) {
   const inner = (
-    <motion.div
+    <div
       className={`group relative p-6 md:p-8 rounded-2xl border transition-[border-color,background-color] duration-300 ${
         venture.featured
           ? 'border-accent/30 bg-accent/[0.04] hover:border-accent/50 hover:bg-accent/[0.06]'
           : 'border-white/[0.10] bg-white/[0.03] hover:border-white/[0.18] hover:bg-white/[0.05]'
       }`}
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-60px' }}
     >
       {venture.featured && (
         <div className="absolute top-4 right-4 md:top-6 md:right-6">
@@ -301,7 +107,7 @@ function VentureCard({ venture }: { venture: Venture }) {
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 
   if (venture.link) {
@@ -340,7 +146,7 @@ const ventures: Venture[] = [
     description:
       'Partnered with forestry operators to replace their fragmented spreadsheet workflows with a unified platform for tracking equipment, employees, and project profitability.',
     highlights: [
-      'Delivered functional MVP in 4 months — met the client\'s operational deadlines',
+      "Delivered functional MVP in 4 months — met the client's operational deadlines",
       'Real-time project tracking and expense dashboards so operators spot unprofitable work early',
       'Recruited a dev to build a React Native time-card app for field crews',
     ],
@@ -358,7 +164,9 @@ function Ventures() {
       <SectionHeader label="Ventures" title="Companies I founded" />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {ventures.map((venture) => (
-          <VentureCard key={venture.name} venture={venture} />
+          <AnimatedSection key={venture.name} margin="-60px">
+            <VentureCard venture={venture} />
+          </AnimatedSection>
         ))}
       </div>
     </section>
@@ -380,13 +188,7 @@ interface WorkItem {
 
 function WorkCard({ item }: { item: WorkItem }) {
   const inner = (
-    <motion.div
-      className="group relative p-6 md:p-8 rounded-2xl border border-white/[0.10] bg-white/[0.03] hover:border-white/[0.18] hover:bg-white/[0.05] transition-[border-color,background-color] duration-300"
-      variants={fadeUp}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: '-60px' }}
-    >
+    <div className="group relative p-6 md:p-8 rounded-2xl border border-white/[0.10] bg-white/[0.03] hover:border-white/[0.18] hover:bg-white/[0.05] transition-[border-color,background-color] duration-300">
       <div className="flex flex-col gap-4">
         <div>
           <div className="flex items-center gap-3 mb-1">
@@ -438,7 +240,7 @@ function WorkCard({ item }: { item: WorkItem }) {
           ))}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 
   if (item.link) {
@@ -491,7 +293,7 @@ const workItems: WorkItem[] = [
       'Early hire at a forestry tech company. Built safety and compliance features and shipped their first mobile app.',
     highlights: [
       'Real-time fire restriction monitoring system — loggers get immediate visibility into compliance requirements',
-      'Built the company\'s first Flutter mobile app, bringing the platform to field workers',
+      "Built the company's first Flutter mobile app, bringing the platform to field workers",
     ],
     tech: ['Flutter', 'React', 'Python', 'Firebase', 'GCP'],
     link: 'https://logitnow.ca',
@@ -504,59 +306,11 @@ function Work() {
       <SectionHeader label="Work" title="Consulting & roles" />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {workItems.map((item) => (
-          <WorkCard key={item.company} item={item} />
+          <AnimatedSection key={item.company} margin="-60px">
+            <WorkCard item={item} />
+          </AnimatedSection>
         ))}
       </div>
-    </section>
-  );
-}
-
-// ——— Tech strip ———
-
-function TechStrip() {
-  const categories = [
-    {
-      label: 'Frontend',
-      tools: ['React', 'Next.js', 'TypeScript', 'Tailwind', 'Flutter', 'React Native'],
-    },
-    {
-      label: 'Backend',
-      tools: ['Rust', 'Go', 'Python', 'Node.js', 'Postgres', 'Redis', 'Snowflake', 'Firebase'],
-    },
-    {
-      label: 'Infra',
-      tools: ['GCP', 'Azure', 'DigitalOcean', 'Hetzner', 'Docker', 'Dokploy'],
-    },
-  ];
-
-  return (
-    <section className="px-6 md:px-12 lg:px-24 py-16 border-t border-white/[0.06]">
-      <motion.div
-        className="space-y-6"
-        variants={stagger}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-40px' }}
-      >
-        {categories.map((cat) => (
-          <div key={cat.label} className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <span className="text-xs font-mono text-muted/70 uppercase tracking-widest w-20 flex-shrink-0">
-              {cat.label}
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {cat.tools.map((tool) => (
-                <motion.span
-                  key={tool}
-                  className="text-xs font-mono text-muted/65 px-3 py-1.5 rounded-full border border-white/[0.07] hover:border-white/[0.12] hover:text-muted transition-all duration-200"
-                  variants={fadeUp}
-                >
-                  {tool}
-                </motion.span>
-              ))}
-            </div>
-          </div>
-        ))}
-      </motion.div>
     </section>
   );
 }
@@ -613,44 +367,7 @@ function Speaking() {
       <SectionHeader label="Speaking" title="Talks & appearances" />
       <div className="space-y-1">
         {speakingItems.map((item, i) => (
-          <motion.a
-            key={i}
-            href={item.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${item.title} — ${item.context} (opens in new tab)`}
-            className="group flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 py-5 px-5 -mx-5 rounded-xl border border-transparent hover:border-white/[0.08] hover:bg-white/[0.03] transition-[border-color,background-color] duration-200"
-            variants={fadeUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-40px' }}
-          >
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2">
-                <h3 className="text-[15px] font-medium text-foreground group-hover:text-accent transition-colors duration-200 truncate">
-                  {item.title}
-                </h3>
-                <svg
-                  aria-hidden="true"
-                  className="w-3.5 h-3.5 text-muted/55 group-hover:text-accent flex-shrink-0 transition-all duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M7 17 17 7" />
-                  <path d="M7 7h10v10" />
-                </svg>
-              </div>
-              <p className="text-sm text-muted mt-0.5">{item.description}</p>
-            </div>
-            <div className="flex items-center gap-3 sm:ml-8 flex-shrink-0">
-              <span className="text-xs font-mono text-muted/80">{item.context}</span>
-              <span className="text-xs font-mono text-muted/65">{item.year}</span>
-            </div>
-          </motion.a>
+          <AnimatedSpeakingItem key={i} item={item} index={i} />
         ))}
       </div>
     </section>
@@ -662,23 +379,19 @@ function Speaking() {
 function Education() {
   return (
     <section className="px-6 md:px-12 lg:px-24 py-16 border-t border-white/[0.06]">
-      <motion.div
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
-        variants={fadeUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-40px' }}
-      >
-        <div>
-          <span className="text-xs font-mono text-accent uppercase tracking-widest mb-2 block">
-            Education
-          </span>
-          <h3 className="text-lg font-medium">BSc Computing Science</h3>
+      <AnimatedSection margin="-40px">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+          <div>
+            <span className="text-xs font-mono text-accent uppercase tracking-widest mb-2 block">
+              Education
+            </span>
+            <h3 className="text-lg font-medium">BSc Computing Science</h3>
+          </div>
+          <div className="text-sm text-muted font-mono">
+            Thompson Rivers University · Kamloops · 2022
+          </div>
         </div>
-        <div className="text-sm text-muted font-mono">
-          Thompson Rivers University · Kamloops · 2022
-        </div>
-      </motion.div>
+      </AnimatedSection>
     </section>
   );
 }
@@ -697,51 +410,41 @@ function Footer() {
       id="contact"
       className="px-6 md:px-12 lg:px-24 py-16 md:py-24 border-t border-white/[0.06]"
     >
-      <motion.div
-        className="flex flex-col md:flex-row md:items-end md:justify-between gap-8"
-        variants={fadeUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: '-40px' }}
-      >
-        <div>
-          <span className="text-xs font-mono text-accent uppercase tracking-widest mb-3 block">
-            Contact
-          </span>
-          <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">
-            Let&apos;s build something.
-          </h2>
-          <p className="text-muted text-sm max-w-md">
-            Open to interesting projects. If you&apos;re a startup that needs to
-            ship, reach out.
-          </p>
-        </div>
+      <AnimatedSection margin="-40px">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+          <div>
+            <span className="text-xs font-mono text-accent uppercase tracking-widest mb-3 block">
+              Contact
+            </span>
+            <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">
+              Let&apos;s build something.
+            </h2>
+            <p className="text-muted text-sm max-w-md">
+              Open to interesting projects. If you&apos;re a startup that needs to
+              ship, reach out.
+            </p>
+          </div>
 
-        <div className="flex items-center gap-6">
-          {links.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              target={link.href.startsWith('mailto') ? undefined : '_blank'}
-              rel="noopener noreferrer"
-              aria-label={link.href.startsWith('mailto') ? `Email Jonah Duckworth` : `${link.label} (opens in new tab)`}
-              className="text-sm text-muted hover:text-foreground transition-colors duration-200 underline decoration-white/10 underline-offset-4 hover:decoration-accent/50"
-            >
-              {link.label}
-            </a>
-          ))}
+          <div className="flex items-center gap-6">
+            {links.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                target={link.href.startsWith('mailto') ? undefined : '_blank'}
+                rel="noopener noreferrer"
+                aria-label={link.href.startsWith('mailto') ? `Email Jonah Duckworth` : `${link.label} (opens in new tab)`}
+                className="text-sm text-muted hover:text-foreground transition-colors duration-200 underline decoration-white/10 underline-offset-4 hover:decoration-accent/50"
+              >
+                {link.label}
+              </a>
+            ))}
+          </div>
         </div>
-      </motion.div>
+      </AnimatedSection>
 
-      <motion.div
-        className="mt-16 pt-8 border-t border-white/[0.06] text-xs text-muted/70 font-mono"
-        variants={fadeUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-      >
+      <AnimatedSection className="mt-16 pt-8 border-t border-white/[0.06] text-xs text-muted/70 font-mono">
         © {new Date().getFullYear()} Jonah Duckworth
-      </motion.div>
+      </AnimatedSection>
     </footer>
   );
 }
@@ -750,18 +453,18 @@ function Footer() {
 
 export default function Page() {
   return (
-    <MotionConfig reducedMotion="user">
-    <main className="relative">
-      <ParticleField />
-      <Nav />
-      <Hero />
-      <Ventures />
-      <Work />
-      <TechStrip />
-      <Speaking />
-      <Education />
-      <Footer />
-    </main>
-    </MotionConfig>
+    <MotionProvider>
+      <main className="relative">
+        <ParticleFieldWrapper />
+        <AnimatedNav />
+        <HeroSection />
+        <Ventures />
+        <Work />
+        <AnimatedTechStrip />
+        <Speaking />
+        <Education />
+        <Footer />
+      </main>
+    </MotionProvider>
   );
 }
