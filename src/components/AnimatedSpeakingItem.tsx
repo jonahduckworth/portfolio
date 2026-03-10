@@ -48,7 +48,7 @@ export function AnimatedSpeakingItem({ item, index }: { item: SpeakingItem; inde
       </div>
       <div className="flex items-center gap-3 sm:ml-8 flex-shrink-0">
         <span className="text-xs font-mono text-muted/80">{item.context}</span>
-        <span className="text-xs font-mono text-muted/65">{item.year}</span>
+        <span className="text-xs font-mono text-muted/90">{item.year}</span>
       </div>
     </motion.a>
   );

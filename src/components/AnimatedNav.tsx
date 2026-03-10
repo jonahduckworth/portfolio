@@ -11,7 +11,7 @@ export function AnimatedNav() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 }}
     >
-      <a href="#" aria-label="Home" className="text-xs sm:text-sm font-medium tracking-tight text-foreground">
+      <a href="#" className="text-xs sm:text-sm font-medium tracking-tight text-foreground">
         jonah duckworth
       </a>
       <div className="flex items-center gap-3 sm:gap-6">

@@ -30,14 +30,14 @@ export function AnimatedTechStrip() {
       >
         {categories.map((cat) => (
           <div key={cat.label} className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <span className="text-xs font-mono text-muted/70 uppercase tracking-widest w-20 flex-shrink-0">
+            <span className="text-xs font-mono text-muted uppercase tracking-widest w-20 flex-shrink-0">
               {cat.label}
             </span>
             <div className="flex flex-wrap gap-2">
               {cat.tools.map((tool) => (
                 <motion.span
                   key={tool}
-                  className="text-xs font-mono text-muted/65 px-3 py-1.5 rounded-full border border-white/[0.07] hover:border-white/[0.12] hover:text-muted transition-all duration-200"
+                  className="text-xs font-mono text-muted/90 px-3 py-1.5 rounded-full border border-white/[0.07] hover:border-white/[0.12] hover:text-muted transition-all duration-200"
                   variants={fadeUp}
                 >
                   {tool}
