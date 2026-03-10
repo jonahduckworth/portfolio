@@ -442,7 +442,7 @@ function Footer() {
         </div>
       </AnimatedSection>
 
-      <AnimatedSection className="mt-16 pt-8 border-t border-white/[0.06] text-xs text-muted/70 font-mono">
+      <AnimatedSection className="mt-16 pt-8 border-t border-white/[0.06] text-xs text-muted font-mono">
         © {new Date().getFullYear()} Jonah Duckworth
       </AnimatedSection>
     </footer>
