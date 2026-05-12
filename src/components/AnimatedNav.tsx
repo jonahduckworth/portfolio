@@ -12,9 +12,10 @@ export function AnimatedNav() {
       transition={{ duration: 0.5, delay: 0.1 }}
     >
       <a href="#" className="text-xs sm:text-sm font-medium tracking-tight text-foreground">
-        jonah duckworth
+        <span className="sm:hidden">jd</span>
+        <span className="hidden sm:inline">jonah duckworth</span>
       </a>
-      <div className="flex items-center gap-3 sm:gap-6">
+      <div className="flex items-center gap-2 sm:gap-6">
         <a
           href="#work"
           className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors duration-200"
@@ -32,6 +33,12 @@ export function AnimatedNav() {
           className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors duration-200"
         >
           speaking
+        </a>
+        <a
+          href="https://clients.jdbuilds.ca"
+          className="text-xs sm:text-sm text-muted hover:text-foreground transition-colors duration-200"
+        >
+          clients
         </a>
         <a
           href="#contact"
